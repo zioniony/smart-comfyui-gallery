@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartGallery: {{ current_folder_info.display_name }}</title>
-    <link rel="icon" type="image/png" href="{{ app_logo_b64 }}">
+    <title>SmartGallery: {{ .current_folder_info.display_name }}</title>
+    <link rel="icon" type="image/png" href="{{ .app_logo_b64 }}">
         
 <style>
         :root {
@@ -22,11 +22,6 @@
             --favorite-color: #ffc107;
             --workflow-color: #28a745;
             --success-color: #20c997;
-            
-            /* AI Colors */
-            --ai-color: #ff00ff; /* Fuxia */
-            --ai-gradient: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
-            --ai-surface: rgba(255, 0, 255, 0.1);
             
             --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
@@ -748,7 +743,7 @@
         }
 
         .fs-icon { color: var(--favorite-color); font-size: 1.2rem; }
-        .fs-drive-icon { color: var(--ai-color); font-size: 1.2rem; }
+        .fs-drive-icon { color: var(--primary-color); font-size: 1.2rem; }
         
         /* --- MOBILE LAYOUT OVERRIDES (Mount Modal Fix) --- */
         @media (max-width: 768px) {
@@ -1443,20 +1438,7 @@
             visibility: hidden;
         }
 
-        /* Modified: .ai-banner removed from here as it is fully redefined later. Keeping global-search-banner */
-        .global-search-banner {
-            background: var(--ai-surface);
-            border-bottom: 1px solid var(--ai-color);
-            padding: 1rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: var(--ai-color);
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(255, 0, 255, 0.2);
-            animation: glow 2s infinite alternate;
-        }
-        
+
         .global-search-banner {
             background: rgba(0, 123, 255, 0.1); /* Blue for Standard */
             border-color: var(--primary-color);
@@ -1465,17 +1447,10 @@
             animation: glowBlue 2s infinite alternate;
         }
 
-        @keyframes glow {
-            from { box-shadow: 0 0 5px rgba(255, 0, 255, 0.1); }
-            to { box-shadow: 0 0 15px rgba(255, 0, 255, 0.4); }
-        }
-        
         @keyframes glowBlue {
             from { box-shadow: 0 0 5px rgba(0, 123, 255, 0.1); }
             to { box-shadow: 0 0 15px rgba(0, 123, 255, 0.4); }
         }
-
-        /* Deleted: .ai-banner-title - Overwritten by "STILI AI BANNER" block later */
         
         /* --- RECURSIVE SEARCH TOGGLE STYLE --- */
         .recursive-wrapper {
@@ -1528,15 +1503,6 @@
             filter: grayscale(1);
         }
         
-        /* New Styles for AI Options and Lightbox */
-        .ai-search-options-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
 
             /* hide native arrows (Chrome, Safari, Edge, Opera) */
             input[type=number]::-webkit-outer-spin-button,
@@ -1548,75 +1514,6 @@
             input[type=number] {
               -moz-appearance: textfield;
             }
-
-            .ai-limit-container {
-                display: flex;
-                align-items: center;
-                background: var(--glass-bg);
-                border: 1px solid var(--glass-border);
-                border-radius: 8px;
-                overflow: hidden; /* Mantiene i bordi arrotondati */
-                height: 36px; /* Altezza fissa per coerenza */
-            }
-
-            .ai-limit-btn {
-                background: transparent;
-                border: none;
-                color: var(--ai-color);
-                font-size: 1.2rem;
-                font-weight: bold;
-                width: 30px;
-                height: 100%;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: background 0.2s;
-            }
-
-            .ai-limit-btn:hover {
-                background: rgba(255, 0, 255, 0.2);
-                color: white;
-            }
-
-            .ai-limit-input {
-                background: transparent;
-                border: none;
-                border-left: 1px solid var(--glass-border);
-                border-right: 1px solid var(--glass-border);
-                color: white;
-                width: 50px;
-                height: 100%;
-                font-size: 1rem;
-                text-align: center;
-                font-weight: bold;
-                outline: none;
-            }
-
-            .ai-limit-input:focus {
-                background: rgba(255, 255, 255, 0.05);
-            }
-
-        .ai-banner-actions button {
-            background: transparent;
-            border: 1px solid var(--ai-color);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .global-search-banner .ai-banner-actions button {
-            border-color: var(--primary-color);
-        }
-        .global-search-banner .ai-banner-actions button:hover {
-            background: var(--primary-color);
-        }
-
-        .ai-banner-actions button:hover {
-            background: var(--ai-color);
-        }
 
         .gallery-container {
             display: grid;
@@ -1641,6 +1538,9 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             height: fit-content; 
+            content-visibility: auto;
+            contain-intrinsic-size: 320px 480px;
+            contain: layout paint style;
         }
 
         .gallery-item:hover {
@@ -1830,22 +1730,6 @@
             font-weight: 600;
         }
         
-        .ai-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: var(--ai-color);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            z-index: 10;
-            text-transform: uppercase;
-        }
-
-
         #drag-drop-overlay {
             position: fixed;
             top: 0;
@@ -2060,12 +1944,6 @@
             background: rgba(255, 255, 255, 0.2);
         }
         
-        /* AI Caption Icon in Lightbox */
-        #lightbox-caption-icon {
-            color: var(--ai-color);
-            border-color: var(--ai-color);
-        }
-
         #lightbox-content {
             display: flex;
             flex-direction: column;
@@ -2092,87 +1970,6 @@
             border-radius: 12px;
             box-shadow: var(--shadow-lg);
             cursor: grab;
-        }
-        
-        #lightbox-ai-caption {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 700px;
-            max-height: 40vh; /* Altezza massima */
-            
-            /* Layout Flex per gestire header fisso e content scrollabile */
-            display: none; 
-            flex-direction: column;
-            overflow: hidden; /* Il contenitore NON scrolla */
-            
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--ai-color);
-            border-radius: 12px;
-            /* Padding ridotto sul container, spostato nel contenuto */
-            padding: 10px; 
-            
-            z-index: 2020;
-            color: #eee;
-            font-size: 1rem;
-            line-height: 1.5;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-        }
-        
-        #lightbox-ai-caption.visible {
-            display: flex; /* Importante: flex per il layout */
-            animation: slideUpCaption 0.3s ease-out;
-        }
-
-        /* Nuovo contenitore per il testo che scrolla */
-        #lightbox-ai-text-scroll {
-            overflow-y: auto; /* Solo questo div scrolla */
-            flex-grow: 1;
-            padding: 10px 15px; /* Padding interno per il testo */
-            margin-top: 5px;
-            padding-right: 5px; /* Spazio per scrollbar */
-        }
-
-        /* Stile scrollbar interno */
-        #lightbox-ai-text-scroll::-webkit-scrollbar {
-            width: 6px;
-        }
-        #lightbox-ai-text-scroll::-webkit-scrollbar-thumb {
-            background-color: var(--ai-color);
-            border-radius: 3px;
-        }
-
-        @keyframes slideUpCaption {
-            from { transform: translate(-50%, 50px); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
-        
-        .caption-close-btn {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            background: rgba(10, 10, 10, 0.5); /* Sfondo leggero per leggibilità sopra testo */
-            border-radius: 50%;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.5rem;
-            cursor: pointer;
-            line-height: 1;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            z-index: 10; /* Sempre sopra */
-        }
-        
-        .caption-close-btn:hover {
-            color: var(--danger-color);
-            background: rgba(255, 255, 255, 0.1);
         }
         
         /* --- PREMIUM GO TO TOP BUTTON (Fixed Contrast & Mobile) --- */
@@ -2310,8 +2107,7 @@
 
         #node-summary-overlay,
         #upload-overlay,
-        #sync-overlay,
-        #ai-search-overlay {
+        #sync-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -2334,10 +2130,6 @@
         #upload-overlay {
             z-index: 2200;
         }
-        
-        #ai-search-overlay {
-            z-index: 2250;
-        }
 
         #sync-overlay {
             z-index: 2300;
@@ -2347,8 +2139,7 @@
         }
 
         #node-summary-overlay.visible,
-        #upload-overlay.visible,
-        #ai-search-overlay.visible {
+        #upload-overlay.visible {
             opacity: 1;
             pointer-events: auto;
         }
@@ -2367,114 +2158,6 @@
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* AI Modal Styles */
-        .ai-modal-panel {
-            background: var(--surface-color);
-            border: 1px solid var(--ai-color);
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.2);
-            width: 90vw;
-            max-width: 500px;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            transform: scale(0.95);
-            transition: transform 0.3s;
-            position: relative;
-        }
-        
-        #ai-search-overlay.visible .ai-modal-panel {
-            transform: scale(1);
-        }
-        
-        .ai-modal-header {
-            text-align: center;
-            color: white;
-        }
-        
-        .ai-modal-header h2 {
-            margin: 0;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .ai-search-textarea {
-            width: 100%;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: white;
-            padding: 1rem;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 1rem;
-            resize: vertical;
-            min-height: 100px;
-        }
-        
-        .ai-search-textarea:focus {
-            outline: none;
-            border-color: var(--ai-color);
-            box-shadow: 0 0 10px rgba(255,0,255,0.2);
-        }
-        
-        .ai-scope-selector {
-            display: flex;
-            background: var(--glass-bg);
-            padding: 4px;
-            border-radius: 10px;
-            border: 1px solid var(--glass-border);
-        }
-        
-        .ai-scope-option {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 8px;
-            font-weight: 500;
-            color: var(--text-muted);
-            transition: all 0.3s;
-        }
-        
-        .ai-scope-option.active {
-            background: var(--ai-color);
-            color: white;
-            font-weight: bold;
-        }
-        
-        .ai-search-submit {
-            background: var(--ai-gradient);
-            border: none;
-            color: white;
-            padding: 1rem;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-            box-shadow: 0 4px 15px rgba(255,0,255,0.3);
-        }
-        
-        .ai-search-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,0,255,0.5);
-        }
-        
-        .ai-modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
         .node-summary-panel {
             max-width: 900px;
             max-height: 85vh;
@@ -3674,7 +3357,7 @@
         }
         .gen-lora-chip {
             background: rgba(155, 48, 255, 0.15);
-            border: 1px solid var(--ai-color);
+            border: 1px solid var(--primary-color);
             color: #f0a0ff;
             padding: 4px 10px;
             border-radius: 20px;
@@ -3783,37 +3466,6 @@
             }
         }
 
-        .ai-input-wrapper {
-            position: relative;
-            width: 100%;
-        }
-
-        #ai-search-clear-text {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            color: var(--text-muted);
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            display: none; /* Nascosto di default */
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        #ai-search-clear-text:hover {
-            background: var(--danger-color);
-            color: white;
-            border-color: var(--danger-color);
-        }
-        
-        /* Deleted: .ai-btn-text - Overwritten by "UNIFIED AI BUTTONS" block later */
-
         /* --- LAYOUT MOBILE HEADER (Filtri + AI) --- */
         .mobile-header-row {
             display: none; /* Nascosto su desktop */
@@ -3822,341 +3474,6 @@
             width: 100%;
         }
 
-        
-        
-        /* --- STILI AI BANNER (DESKTOP & MOBILE) --- */
-        .ai-banner {
-            background: var(--ai-surface);
-            border-bottom: 1px solid var(--ai-color);
-            padding: 1rem 2rem;
-            /* DESKTOP DEFAULT: Flexbox su una riga */
-            display: flex; 
-            align-items: center;
-            justify-content: space-between;
-            color: var(--ai-color);
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(255, 0, 255, 0.2);
-            animation: glow 2s infinite alternate;
-        }
-
-        .ai-banner-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
-            overflow: hidden; /* Per desktop */
-            white-space: nowrap; /* Per desktop */
-            text-overflow: ellipsis; /* Per desktop */
-            margin-right: 15px;
-        }
-
-        .ai-query-part {
-            color: white;
-            margin-left: 5px;
-        }
-
-        .ai-banner-actions {
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-        /* --- LAYOUT MOBILE AI BANNER (GRID) --- */
-        @media (max-width: 768px) {
-            .ai-banner, .global-search-banner {
-                padding: 12px;
-                /* Passiamo a Grid per controllo posizionale preciso */
-                display: grid !important; 
-                grid-template-columns: 1fr auto; /* Colonna 1: Label, Colonna 2: Bottoni */
-                gap: 10px 0; /* Spazio verticale tra le righe */
-                height: auto;
-            }
-
-            .ai-banner-title {
-                /* TRUCCO: display: contents fa sparire il div contenitore dal layout,
-                   così i suoi figli (span scope e span query) diventano figli diretti della Grid .ai-banner */
-                display: contents !important; 
-            }
-
-            /* RIGA 1, COLONNA 1: Label (es. "🧠 Global") */
-            .ai-scope-part {
-                grid-column: 1;
-                grid-row: 1;
-                align-self: center;
-                font-size: 0.95rem;
-                white-space: nowrap;
-            }
-
-            /* RIGA 1, COLONNA 2: Bottoni (Edit/Exit) */
-            .ai-banner-actions {
-                grid-column: 2;
-                grid-row: 1;
-                align-self: center;
-            }
-            
-            /* Bottoni un po' più compatti su mobile */
-            .ai-banner-actions button {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.85rem;
-            }
-
-            /* RIGA 2: Query utente (Tutta larghezza) */
-            .ai-query-part {
-                grid-column: 1 / -1; /* Occupa tutte le colonne */
-                grid-row: 2;
-                margin-left: 0;
-                white-space: normal; /* Permette a capo */
-                word-break: break-word;
-                background: rgba(0,0,0,0.3); /* Sfondo scuro per risaltare */
-                padding: 8px 10px;
-                border-radius: 8px;
-                border-left: 3px solid var(--ai-color);
-                font-weight: normal;
-                font-size: 1rem;
-                line-height: 1.4;
-            }
-        }
- 
-        /* --- CAPTION (Start/Middle/End) --- */
-        .ai-caption-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-left: 3px solid var(--ai-color);
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 15px;
-            padding: 0;
-            overflow: hidden;
-            transition: background 0.3s;
-        }
-        
-        .ai-caption-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .ai-card-header {
-            background: rgba(255, 0, 255, 0.15);
-            color: var(--ai-color);
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            padding: 5px 10px;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .ai-card-body {
-            padding: 10px 12px;
-            color: #ddd;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        /* Icone decorative per i frame */
-        .ai-card-header::before {
-            content: '⏱️';
-            font-size: 0.9rem;
-        }
-        /* --- MODAL INFO AI --- */
-        #ai-info-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 3000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        #ai-info-overlay.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .ai-info-panel {
-            background: #111;
-            border: 2px solid var(--ai-color); /* Bordo Fuxia */
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.25); /* Bagliore */
-            text-align: center;
-            color: #eee;
-        }
-
-        .ai-info-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 2rem;
-            cursor: pointer;
-            line-height: 1;
-        }
-        
-        .ai-info-close:hover { color: var(--ai-color); }
-
-        .ai-hero-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 0 10px var(--ai-color));
-        }
-
-        .ai-info-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #fff 0%, var(--ai-color) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .ai-info-text {
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            color: #ccc;
-        }
-
-        .ai-comparison-box {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            text-align: left;
-            border-left: 4px solid var(--ai-color);
-        }
-
-        .ai-badge-light { color: var(--success-color); font-weight: bold; }
-        .ai-badge-full { color: var(--ai-color); font-weight: bold; }
-
-        .ai-cta-btn {
-            display: inline-block;
-            background: linear-gradient(90deg, var(--ai-color) 0%, #a0f 100%);
-            color: white;
-            text-decoration: none;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 5px 15px rgba(180, 0, 255, 0.4);
-        }
-
-        .ai-cta-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(180, 0, 255, 0.6);
-        }
-        
-        /* ---  MORE MODAL INFO AI --- */
-        .ai-status-alert {
-            background: rgba(255, 50, 50, 0.1);
-            border: 1px solid rgba(255, 50, 50, 0.4);
-            color: #ffcccc;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .ai-status-alert code {
-            background: rgba(0,0,0,0.3);
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: #fff;
-            font-family: monospace;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .ai-steps-list {
-            text-align: left;
-            margin: 1.5rem 0;
-            padding-left: 1.5rem;
-            color: #ddd;
-        }
-        
-        .ai-steps-list li {
-            margin-bottom: 0.8rem;
-        }
-        
-        .ai-steps-list strong {
-            color: var(--ai-color);
-        }
-        /* --- STILI PER IL BLOCCO READ MORE (ACCORDION) --- */
-        .ai-details {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: left;
-            overflow: hidden;
-            transition: background 0.3s;
-        }
-
-        .ai-details:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .ai-details summary {
-            padding: 12px 15px;
-            cursor: pointer;
-            font-weight: bold;
-            color: var(--ai-color);
-            list-style: none; /* Nasconde triangolo default */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            user-select: none;
-        }
-
-        /* Rimuove marker default su Safari/Chrome */
-        .ai-details summary::-webkit-details-marker {
-            display: none;
-        }
-
-        /* Freccetta personalizzata animata */
-        .ai-details summary::after {
-            content: '▼';
-            font-size: 0.7rem;
-            color: #888;
-            transition: transform 0.3s ease;
-        }
-
-        .ai-details[open] summary::after {
-            transform: rotate(180deg);
-            color: var(--ai-color);
-        }
-
-        .ai-details-content {
-            padding: 0 15px 15px 15px;
-            color: #ccc;
-            font-size: 1.05rem;
-            line-height: 1.6;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 5px;
-            padding-top: 10px;
-        }
-        
-        .ai-details-content em {
-            color: #fff;
-            font-style: italic;
-        }
-        
         .limit-warning-box {
             background: rgba(255, 193, 7, 0.1);
             border: 1px solid var(--favorite-color);
@@ -4576,207 +3893,6 @@
         .nav-btn-cancel { background: transparent; color: var(--text-muted); }
         
         .nav-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-        
-        /* --- AI MANAGER STYLES (Nuovi) --- */
-        /* Deleted: #ai-manager-btn and hover - Overwritten by "UNIFIED AI BUTTONS" block later */
-
-        #ai-manager-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
-            z-index: 5000; display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s;
-        }
-        #ai-manager-overlay.visible { opacity: 1; pointer-events: auto; }
-
-        .ai-manager-panel {
-            background: var(--surface-color); border: 1px solid var(--ai-color); border-radius: 16px;
-            width: 800px; max-width: 95vw; 
-            max-height: 85vh; 
-            display: flex; flex-direction: column;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.15); 
-            position: relative;
-        }
-
-        .ai-manager-header {
-            padding: 1rem 1.5rem; background: var(--ai-surface); border-bottom: 1px solid var(--ai-color);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .ai-manager-header h2 { margin: 0; color: white; display: flex; align-items: center; gap: 10px; font-size:1.4rem; }
-        .ai-manager-close { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
-
-        .ai-manager-tabs { display: flex; border-bottom: 1px solid var(--border-color); background: var(--surface-hover); }
-        .ai-tab-btn {
-            flex: 1; padding: 1rem; background: none; border: none; color: var(--text-muted);
-            cursor: pointer; font-weight: 600; transition: all 0.2s; border-bottom: 2px solid transparent;
-        }
-        .ai-tab-btn.active { color: var(--ai-color); border-bottom-color: var(--ai-color); background: rgba(255,0,255,0.05); }
-
-        .ai-manager-content { 
-            padding: 1.5rem; 
-            overflow-y: auto; 
-            flex: 1; 
-            min-height: 0; /* Fix Firefox flexbox */
-        }
-        
-        #ai-manager-btn-desk {
-            height: 42px !important; 
-            margin-top: 0 !important;
-        }
-        
-        .ai-tab-content { display: none; }
-        .ai-tab-content.active { display: block; }
-
-        .ai-queue-list-container {
-            margin-top: 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: rgba(0,0,0,0.2);
-            max-height: 150px;
-            overflow-y: auto;
-        }
-        .ai-queue-item {
-            padding: 6px 10px;
-            border-bottom: 1px solid var(--glass-border);
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            display: flex; justify-content: space-between;
-        }
-        .ai-queue-item:last-child { border-bottom: none; }
-        /* AI Priority Item Style */
-        .ai-queue-item.priority {
-            background: rgba(220, 53, 69, 0.15); /* Red tint */
-            border-left: 3px solid var(--danger-color);
-        }
-        .ai-queue-item.priority span {
-            color: #ffcccc;
-            font-weight: 600;
-        }
-        .ai-status-bar {
-            display: flex; gap: 20px; margin-bottom: 20px; background: var(--glass-bg);
-            padding: 15px; border-radius: 8px; border: 1px solid var(--glass-border); flex-wrap: wrap;
-        }
-        .ai-stat-item { flex: 1; text-align: center; min-width: 120px; }
-        .ai-stat-val { font-size: 1.2rem; font-weight: bold; color: white; display: block; }
-        .ai-stat-lbl { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; }
-
-        .ai-progress-wrapper { margin-bottom: 20px; }
-        .ai-progress-track { height: 12px; background: #333; border-radius: 6px; overflow: hidden; position: relative; }
-        .ai-progress-fill { height: 100%; background: var(--ai-gradient); width: 0%; transition: width 0.3s; }
-        .ai-progress-text { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-top: 5px; }
-
-        .ai-controls-row { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 15px; }
-        .ai-btn-action {
-            padding: 8px 16px; border-radius: 6px; border: 1px solid var(--border-color);
-            background: var(--surface-hover); color: white; cursor: pointer; font-weight: 600;
-            display: flex; align-items: center; gap: 6px;
-        }
-        .ai-btn-action:hover { filter: brightness(1.2); }
-        .ai-btn-pause { border-color: var(--favorite-color); color: var(--favorite-color); }
-        .ai-btn-danger { border-color: var(--danger-color); color: var(--danger-color); }
-
-        .watched-folder-item {
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            /* Increased padding for better touch targets on mobile */
-            padding: 12px 10px; 
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .watched-folder-path { 
-            font-family: monospace; 
-            color: var(--text-color);
-            /* FIX FOR LONG PATHS ON MOBILE: */
-            word-break: break-all; /* Breaks long path strings */
-            
-            /* PRESERVE SPACES FIX: */
-            white-space: pre-wrap;   /* Allows text wrapping AND preserves multiple spaces */
-            
-            line-height: 1.3;
-            margin-right: 10px;    /* Space between text and Stop button */
-        }
-        .gpu-warning {
-            background: rgba(220, 53, 69, 0.2); border: 1px solid var(--danger-color);
-            color: #ffcccc; padding: 10px; border-radius: 6px; margin-bottom: 15px;
-            display: none; align-items: center; gap: 10px;
-        }
-        .gpu-warning.visible { display: flex; }
-        .folder-action-btn.ai-index-btn { color: var(--ai-color); font-weight: bold; }
-        
-        /* --- AI INDEX OPTIONS MODAL --- */
-        #ai-options-modal {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.6); z-index: 6000; display: none;
-            justify-content: center; align-items: center; backdrop-filter: blur(3px);
-        }
-        #ai-options-modal.visible { display: flex; }
-        
-        .ai-options-panel {
-            background: var(--surface-color); border: 1px solid var(--ai-color);
-            border-radius: 12px; padding: 20px; width: 400px; max-width: 90vw;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
-        .ai-opt-header { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; color: white; display: flex; gap: 10px; align-items: center; }
-        .ai-opt-row { margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
-        .ai-opt-desc { font-size: 0.85rem; color: var(--text-muted); margin-top: -5px; margin-bottom: 10px; display: block; line-height: 1.3;}
-        .ai-opt-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
-        .ai-path-preview { font-family: monospace; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 4px; font-size: 0.8rem; margin-bottom: 15px; word-break: break-all; color: var(--ai-color); }
-        
-        /* --- AI MANAGER SETTINGS IMPROVEMENTS --- */
-        .ai-settings-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .ai-setting-card {
-            background: var(--surface-hover);
-            border: 1px solid var(--border-color);
-            padding: 1.5rem;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .ai-setting-card label {
-            color: var(--ai-color);
-            font-weight: bold;
-            font-size: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .ai-setting-desc {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
-        /* Fix for dark mode dropdowns (especially on mobile) */
-        .ai-setting-card select {
-            background-color: var(--glass-bg);
-            color: white;
-            border: 1px solid var(--glass-border);
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 1rem;
-            width: 100%;
-        }
-        
-        .ai-setting-card select option {
-            background-color: var(--surface-color);
-            color: white; /* Ensure text is visible in options */
-        }
-
-        .ai-setting-card input[type="checkbox"] {
-            width: 20px; 
-            height: 20px; 
-            accent-color: var(--ai-color);
-        }
-        
         /* Modal Erase Button */
         .nav-btn-danger-outline {
             background: transparent;
@@ -4786,8 +3902,8 @@
         .nav-btn-danger-outline:hover {
             background: var(--danger-color);
             color: white;
-        }
-        
+        }  
+              
         /* --- FOLDER ACTION MENU (Restyled) --- */
         .folder-menu-container {
             position: relative;
@@ -4858,128 +3974,12 @@
             transform: translateX(4px); /* Little visual feedback */
         }
         
-        /* Specific style for AI Index button inside menu */
-        .folder-dropdown button[onclick*="indexFolder"] {
-            color: var(--ai-color); /* Fuchsia text */
-        }
-        .folder-dropdown button[onclick*="indexFolder"]:hover {
-            background: rgba(255, 0, 255, 0.15);
-        }
-
         /* Specific style for Delete button inside menu */
         .folder-dropdown button[onclick*="deleteFolder"] {
             color: #ff6b6b; /* Soft Red */
         }
         .folder-dropdown button[onclick*="deleteFolder"]:hover {
             background: rgba(220, 53, 69, 0.15);
-        }
-        
-        /* Watched Folder Indicator */
-        .folder-link.ai-watched::before {
-            /* This targets the emoji inside the text if we wrap it, 
-               but simpler is to handle it in JS by changing the string */
-        }
-
-        /* --- LIGHTBOX MOBILE FIX --- */
-        /* Add padding at the bottom to ensure last line is not cut off by borders/screen edge */
-        #lightbox-ai-text-scroll {
-            padding-bottom: 40px !important; 
-        }
-
-        /* --- AI MANAGER TOGGLE BUTTON --- */
-        #ai-toggle-pause {
-            padding: 8px 20px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
-        }
-        
-        /* State: Running (Button shows Pause option) */
-        #ai-toggle-pause.state-running {
-            background: var(--surface-hover);
-            border-color: var(--favorite-color);
-            color: var(--favorite-color);
-        }
-        
-        /* State: Paused (Button shows Resume option - GREEN) */
-        #ai-toggle-pause.state-paused {
-            background: var(--success-color); /* Green Background */
-            border-color: #1a9c77;
-            color: white; /* White text */
-            box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
-        }
-        
-        /* Text Color for Status Label */
-        .ai-stat-val.status-paused {
-            color: var(--favorite-color) !important; /* Yellow */
-        }
-        
-        /* ========================================= */
-        /* === UNIFIED AI BUTTONS STYLE (CLEAN) === */
-        /* ========================================= */
-
-        /* Target: AI Manager (Top), AI Search (Desktop & Mobile) */
-        #ai-manager-btn,
-        #ai-search-toggle-desktop,
-        #ai-search-toggle-mobile,
-        .filter-bar button.ai-btn {
-            background: var(--glass-bg) !important;           /* Match Filters Button */
-            border: 1px solid var(--glass-border) !important; /* Match Filters Button */
-            color: var(--ai-color) !important;                /* Text remains Fuchsia */
-            border-radius: 8px !important;
-            padding: 0.75rem 1rem !important;                 /* Uniform padding */
-            font-size: 0.9rem !important;
-            font-weight: 600 !important;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: none !important;                      /* Remove old glow */
-            text-shadow: none !important;
-            
-            /* Flex layout for icons */
-            display: inline-flex !important;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            height: auto !important;                          /* Remove fixed height */
-            margin-right: 5px;
-        }
-
-        /* Hover State: Standard Surface change + Subtle Fuchsia Border */
-        #ai-manager-btn:hover,
-        #ai-search-toggle-desktop:hover,
-        #ai-search-toggle-mobile:hover,
-        .filter-bar button.ai-btn:hover {
-            background: var(--surface-hover) !important;
-            border-color: var(--ai-color) !important;         /* Only border lights up */
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
-        }
-
-        /* Active/Pressed State */
-        #ai-search-toggle-desktop:active,
-        #ai-search-toggle-mobile:active {
-            background: var(--surface-color) !important;
-            transform: translateY(0);
-        }
-
-        /* Reset Internal Text Spans */
-        .ai-btn-text {
-            color: var(--ai-color) !important;
-            text-shadow: none !important;
-            font-weight: 600 !important;
-            text-transform: none !important; /* Optional: Remove UPPERCASE if present */
-            margin: 0 !important;
-        }
-        
-        /* Remove the old specific glow animation from the Manager button if present */
-        #ai-manager-btn:hover {
-            box-shadow: none;
         }
         
         /* Modifiche Media Query per Mobile */
@@ -4997,34 +3997,10 @@
                 text-align: center;
                 width: auto; /* Reset larghezza */
             }
-
-            /* Nascondi il bottone AI "Desktop" che sta in basso */
-            #ai-search-toggle-desktop {
-                display: none !important;
-            }
             
             /* Hide the Desktop Toggle */
             #search-toggle-desktop {
                 display: none !important;
-            }
-
-            /* Stile per il bottone AI "Mobile" in alto */
-            #ai-search-toggle-mobile {
-                background: var(--glass-bg);
-                border: 1px solid var(--ai-color);
-                color: white;
-                border-radius: 8px;
-                padding: 0 1rem;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0; /* Non si rimpicciolisce */
-                transition: background 0.3s;
-            }
-            
-            #ai-search-toggle-mobile:active {
-                background: var(--ai-surface);
             }
         }
         
@@ -5118,143 +4094,6 @@
             text-shadow: 0 0 2px black; /* Add shadow to read text without background */
         }
         
-        /* --- HIDE AVG TIME STAT (Requested) --- */
-        .ai-status-bar .ai-stat-item:nth-child(3) {
-            display: none !important;
-        }
-        
-        /* New Styles for Modal Toggle */
-        #ai-opt-watched-controls {
-            display: none;
-            background: rgba(255, 193, 7, 0.1); /* Yellow tint */
-            border: 1px solid var(--favorite-color);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        /* --- AI INDEXING DOTS ANIMATION --- */
-        .ai-working-dots {
-            display: inline-flex;
-            align-items: center;
-            margin-left: 8px;
-            height: 10px;
-        }
-        
-        .ai-dot {
-            width: 6px;
-            height: 6px;
-            margin: 0 2px;
-            background-color: var(--success-color); /* Green to match Indexing status */
-            border-radius: 50%;
-            opacity: 0.2;
-            animation: dotFade 1.4s infinite ease-in-out both;
-        }
-        
-        .ai-dot:nth-child(1) { animation-delay: -0.32s; }
-        .ai-dot:nth-child(2) { animation-delay: -0.16s; }
-        .ai-dot:nth-child(3) { animation-delay: 0s; }
-        
-        @keyframes dotFade {
-            0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
-            40% { opacity: 1; transform: scale(1.2); }
-        }
-        
-        /* --- AI SETTINGS MODERN UI --- */
-        .ai-options-group {
-            margin-bottom: 25px;
-        }
-        
-        .ai-group-title {
-            color: var(--ai-color);
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .ai-group-desc {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-
-        .ai-radio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-        }
-
-        /* Hide the actual radio input */
-        .ai-radio-input {
-            display: none;
-        }
-
-        /* The Visual Card */
-        .ai-radio-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .ai-radio-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* Selected State */
-        .ai-radio-input:checked + .ai-radio-card {
-            border-color: var(--ai-color);
-            background: rgba(255, 0, 255, 0.1);
-            box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
-        }
-
-        .ai-opt-name {
-            font-weight: bold;
-            color: white;
-            font-size: 1rem;
-            margin-bottom: 4px;
-        }
-
-        .ai-opt-sub {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        /* Checkmark Icon for selected item */
-        .ai-check-icon {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 16px;
-            height: 16px;
-            background: var(--ai-color);
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            color: white;
-            font-weight: bold;
-        }
-
-        .ai-radio-input:checked + .ai-radio-card .ai-check-icon {
-            display: flex;
-        }
-
         /* --- LIGHTBOX TOGGLE BUTTON POSITIONING --- */
         
         /* 1. Base Style & MOBILE Position (Bottom Center) */
@@ -5294,8 +4133,8 @@
 
         #lightbox-ui-toggle:hover {
             background: rgba(0, 0, 0, 0.8);
-            border-color: var(--ai-color);
-            color: var(--ai-color);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
             transform: translateX(-50%) translateY(-2px); 
         }
 
@@ -5329,6 +4168,65 @@
             flex-direction: column;
             gap: 15px;
             padding: 0.6rem 2rem 1rem 2rem; 
+        }
+        
+        #top-toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 1200;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        #top-toolbar-inner {
+            overflow: hidden;
+            max-height: 520px;
+            transition: max-height 0.25s ease, opacity 0.2s ease;
+        }
+        
+        #top-toolbar-peek {
+            display: none;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        body.topbar-collapsed #top-toolbar {
+            background: transparent;
+            backdrop-filter: none;
+            border-bottom: none;
+        }
+        
+        body.topbar-collapsed #top-toolbar-inner {
+            overflow: visible;
+            max-height: 520px;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        body.topbar-collapsed #top-toolbar-peek {
+            display: none;
+        }
+        
+        body.topbar-collapsed .toolbar-container.desktop-only,
+        body.topbar-collapsed .toolbar-container.mobile-only {
+            display: none;
+        }
+        
+        body.topbar-collapsed .breadcrumbs,
+        body.topbar-collapsed #options-btn-desk,
+        body.topbar-collapsed #shortcuts-btn-desk,
+        body.topbar-collapsed #focus-mode-btn,
+        body.topbar-collapsed #options-btn-mob {
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 1024px) {
+            #top-toolbar-peek {
+                padding: 6px;
+            }
         }
 
         .toolbar-row {
@@ -5380,8 +4278,8 @@
         }
         .glass-btn.active-fuxia {
             background: rgba(255, 0, 255, 0.15);
-            border-color: var(--ai-color);
-            color: var(--ai-color);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
         }
 
         /* 3. BUTTON GROUPS (Merged buttons: Sort, Refresh) */
@@ -5801,7 +4699,7 @@
             height: 30%;
             min-height: 40px;
             background: var(--surface-color);
-            border-top: 2px solid var(--ai-color);
+            border-top: 2px solid var(--primary-color);
             display: flex; flex-direction: column;
             transition: height 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative; z-index: 30;
@@ -6167,17 +5065,17 @@
     <aside class="sidebar">
         <div class="sidebar-header">
             <!-- Brand Link (Blocco Unico a Sinistra) -->
-            <a href="{{ url_for('gallery_view', folder_key='_root_') }}" class="brand-link">
-                <img src="{{ app_logo_b64 }}" alt="Logo" class="brand-logo">
+            <a href="/galleryout/view/_root_" class="brand-link">
+                <img src="{{ .app_logo_b64 }}" alt="Logo" class="brand-logo">
                 <div class="brand-info">
                     <h1>SmartGallery</h1>
                     <div class="version-row-header">
-                        <span class="v-num">v{{ app_version }}</span>
-                        {% if update_available %}
-                        <a href="{{ github_url }}" target="_blank" class="header-update-badge" title="Update available">
-                            🚀 UPDATE v{{ remote_version }}
+                        <span class="v-num">v{{ .app_version }}</span>
+                        {{ if .update_available }}
+                        <a href="{{ .github_url }}" target="_blank" class="header-update-badge" title="Update available">
+                            🚀 UPDATE v{{ .remote_version }}
                         </a>
-                        {% endif %}
+                        {{ end }}
                     </div>
                 </div>
             </a>
@@ -6209,7 +5107,7 @@
         <!-- VERSION & GITHUB FOOTER -->
         <div class="sidebar-footer">
             <!-- Persuasive GitHub Link -->
-            <a href="{{ github_url }}" target="_blank" class="github-promo-link" title="Support SmartGallery on GitHub">
+            <a href="{{ .github_url }}" target="_blank" class="github-promo-link" title="Support SmartGallery on GitHub">
                 <svg class="gh-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                 </svg>
@@ -6222,20 +5120,21 @@
     </aside>
     
     <div class="main-content">
-    <!-- === GLOBAL SORT VARIABLES === -->
-    {% set current_sort_by = request.args.get('sort_by', 'date') %}
-    {% set current_sort_order = request.args.get('sort_order', 'desc') %}
-
+    <div id="top-toolbar">
+        <div id="top-toolbar-peek">
+            <button type="button" id="topbar-toggle-btn-peek" class="glass-btn" style="width:42px; padding:0;" aria-label="Toggle Toolbar">▲</button>
+        </div>
+        <div id="top-toolbar-inner">
     <!-- === ROW 1: NAVIGATION & AI MANAGER === -->
     <div class="toolbar-container" style="padding-bottom: 0;">
         <div class="toolbar-row mobile-header-row">
             <!-- Left: Breadcrumbs -->
             <div class="breadcrumbs" style="padding:0; border:none; background:transparent;">
-                <div class="breadcrumb-links" style="{% if (is_ai_search and ' ||| ' not in ai_query) or is_global_search %}display:none;{% endif %}">
-                    {% for crumb in breadcrumbs %}
-                    <a href="{{ url_for('gallery_view', folder_key=crumb.key) }}">{{ crumb.display_name }}</a>
-                    {% if not loop.last %}<span>/</span>{% endif %}
-                    {% endfor %}
+                <div class="breadcrumb-links">
+                    {{ range $i, $crumb := .breadcrumbs }}
+                    <a href="/galleryout/view/{{ $crumb.key }}">{{ $crumb.display_name }}</a>
+                    {{ if not $crumb.is_last }}<span>/</span>{{ end }}
+                    {{ end }}
                 </div>
             </div>
 
@@ -6248,7 +5147,7 @@
                 </button>
 
                 <!-- 1. Shortcuts Help -->
-                <button type="button" onclick="showShortcutsHelp()" class="glass-btn" title="View Keyboard Shortcuts" style="height: 42px; display: inline-flex; align-items: center; justify-content: center;">
+                <button type="button" id="shortcuts-btn-desk" onclick="showShortcutsHelp()" class="glass-btn" title="View Keyboard Shortcuts" style="height: 42px; display: inline-flex; align-items: center; justify-content: center;">
                     <span style="font-weight:900; margin-right:5px;">?</span> Shortcuts
                 </button>
 
@@ -6257,21 +5156,10 @@
                     <span style="margin-right:0px;">⚡</span> Focus <span class="focus-badge off" id="focus-badge-state">OFF</span>
                 </button>
                 
-                <!-- 3. AI Manager (If enabled) -->
-                {% if enable_ai_search %}
-                <button class="glass-btn active-fuxia" id="ai-manager-btn-desk" onclick="toggleAiManager(true)" style="height: 42px; display: inline-flex; align-items: center; justify-content: center;">
-                    <span style="margin-right:5px;">🧠</span> AI Manager
-                </button>
-                {% endif %}
+                <button type="button" id="topbar-toggle-btn" class="glass-btn" style="width:42px; padding:0;" aria-label="Toggle Toolbar">▲</button>
             </div>
-
-            <!-- Mobile Only: Small AI Button (Keep existing) -->
-            {% if enable_ai_search %}
-            <button class="glass-btn active-fuxia mobile-only push-right" id="ai-manager-btn-mob" onclick="toggleAiManager(true)" style="width:40px; padding:0;">
-                🧠
-            </button>
-            {% endif %}
             <!-- Mobile Options Button -->
+            <button class="glass-btn mobile-only push-right" id="topbar-toggle-btn-mob" style="width:40px; padding:0; margin-left:5px;" aria-label="Toggle Toolbar">▲</button>
             <button class="glass-btn mobile-only push-right" id="options-btn-mob" onclick="toggleOptionsMenu(event)" style="width:40px; padding:0; margin-left:5px;">
                 ⚙️
             </button>
@@ -6282,24 +5170,15 @@
     <div class="toolbar-container desktop-only">
         <div class="toolbar-row">
             
-            <!-- Filters Button (Hidden during AI Search) -->
-            {% if not is_ai_search %}
-            <button type="button" id="search-toggle-desktop" class="glass-btn filter-main-btn {% if active_filters_count > 0 %}active-blue{% endif %}">
-                🔍 Filters {% if active_filters_count > 0 %}({{ active_filters_count }}){% endif %}
-                {% if active_filters_count > 0 %}
+            <button type="button" id="search-toggle-desktop" class="glass-btn filter-main-btn {{ if gt .active_filters_count 0 }}active-blue{{ end }}">
+                🔍 Filters {{ if gt .active_filters_count 0 }}({{ .active_filters_count }}){{ end }}
+                {{ if gt .active_filters_count 0 }}
                     <span class="filter-reset-icon filter-reset-badge" title="Clear all filters">✕</span>
-                {% endif %}
+                {{ end }}
             </button>
-            {% endif %}
-
-            {% if enable_ai_search %}
-            <button type="button" id="ai-search-toggle-desktop" class="glass-btn {% if is_ai_search %}active-fuxia{% endif %}">
-                ✨ AI Search
-            </button>
-            {% endif %}
 
             <div style="display:flex; gap:10px; margin-left:20px;">
-                {% if not is_global_search and not (is_ai_search and ' ||| ' not in ai_query) %}
+                {{ if not .is_global_search }}
                 <button type="button" id="show-upload-modal-btn" class="glass-btn">📤 Upload</button>
                 <button type="button" id="rescan-folder-btn" class="glass-btn">♻️ Rescan</button>
                 
@@ -6320,36 +5199,34 @@
                         </div>
                     </div>
                 </div>
-                {% endif %}
+                {{ end }}
             </div>
 
             <div class="push-right toolbar-row" style="gap:10px;">
                 <span class="file-count-badge">
-                    {% if is_ai_search or is_global_search %}
-                        🔍 {{ total_files }} Result{% if total_files != 1 %}s{% endif %}
-                        <span style="opacity: 0.6; margin-left: 5px;">(of {{ total_db_files }} Total)</span>
-                    {% else %}
-                        📂 {{ total_files }} File{% if total_files != 1 %}s{% endif %}
-                        {% if total_files != total_folder_files %}
-                            <span style="opacity: 0.6; margin-left: 5px;">(of {{ total_folder_files }})</span>
-                        {% endif %}
-                    {% endif %}
+                    {{ if .is_global_search }}
+                        🔍 {{ .total_files }} Result{{ if ne .total_files 1 }}s{{ end }}
+                        <span style="opacity: 0.6; margin-left: 5px;">(of {{ .total_db_files }} Total)</span>
+                    {{ else }}
+                        📂 {{ .total_files }} File{{ if ne .total_files 1 }}s{{ end }}
+                        {{ if ne .total_files .total_folder_files }}
+                            <span style="opacity: 0.6; margin-left: 5px;">(of {{ .total_folder_files }})</span>
+                        {{ end }}
+                    {{ end }}
                 </span>
                 
                 <button type="button" id="toggle-select-btn" class="glass-btn toggle-select-all-btn" onclick="toggleSelectAll()">
                     ✅ Select All
                 </button>
                 
-                {% if not is_ai_search %}
                 <div class="btn-group">
-                    <button type="button" onclick="applySort('date')" class="glass-btn {% if current_sort_by == 'date' %}active-blue{% endif %}">
-                       📅 Date {% if current_sort_by == 'date' %}{{ '↑' if current_sort_order == 'asc' else '↓' }}{% endif %}
+                    <button type="button" onclick="applySort('date')" class="glass-btn {{ if eq .current_sort_by `date` }}active-blue{{ end }}">
+                       📅 Date {{ if eq .current_sort_by `date` }}{{ if eq .current_sort_order `asc` }}↑{{ else }}↓{{ end }}{{ end }}
                     </button>
-                    <button type="button" onclick="applySort('name')" class="glass-btn {% if current_sort_by == 'name' %}active-blue{% endif %}">
-                       🔤 Name {% if current_sort_by == 'name' %}{{ '↑' if current_sort_order == 'asc' else '↓' }}{% endif %}
+                    <button type="button" onclick="applySort('name')" class="glass-btn {{ if eq .current_sort_by `name` }}active-blue{{ end }}">
+                       🔤 Name {{ if eq .current_sort_by `name` }}{{ if eq .current_sort_order `asc` }}↑{{ else }}↓{{ end }}{{ end }}
                     </button>
                 </div>
-                {% endif %}
             </div>
         </div>
     </div>
@@ -6359,43 +5236,23 @@
         
         <!-- Row 2: Metadata & Conditional Filter Button -->
         <div class="mobile-meta-row">
-            {% if not enable_ai_search %}
-                <!-- If AI is disabled, show Filters button here next to the badge -->
-                <button type="button" id="mobile-filter-toggle" class="glass-btn filter-main-btn {% if active_filters_count > 0 %}active-blue{% endif %}">
-                    🔍 Filters {% if active_filters_count > 0 %}({{ active_filters_count }}){% endif %}
-                    {% if active_filters_count > 0 %}<span class="filter-reset-icon filter-reset-badge">✕</span>{% endif %}
-                </button>
-            {% endif %}
+            <button type="button" id="mobile-filter-toggle" class="glass-btn filter-main-btn {{ if gt .active_filters_count 0 }}active-blue{{ end }}">
+                🔍 Filters {{ if gt .active_filters_count 0 }}({{ .active_filters_count }}){{ end }}
+                {{ if gt .active_filters_count 0 }}<span class="filter-reset-icon filter-reset-badge">✕</span>{{ end }}
+            </button>
 
             <span class="file-count-badge">
-                {% if is_ai_search or is_global_search %}
-                    🔍 {{ total_files }} Result{% if total_files != 1 %}s{% endif %}
-                    <span style="opacity: 0.6; margin-left: 5px; font-weight: normal;">(of {{ total_db_files }})</span>
-                {% else %}
-                    📂 {{ total_files }} File{% if total_files != 1 %}s{% endif %}
-                    {% if total_files != total_folder_files %}
-                        <span style="opacity: 0.6; margin-left: 5px; font-weight: normal;">(of {{ total_folder_files }})</span>
-                    {% endif %}
-                {% endif %}
+                {{ if .is_global_search }}
+                    🔍 {{ .total_files }} Result{{ if ne .total_files 1 }}s{{ end }}
+                    <span style="opacity: 0.6; margin-left: 5px; font-weight: normal;">(of {{ .total_db_files }})</span>
+                {{ else }}
+                    📂 {{ .total_files }} File{{ if ne .total_files 1 }}s{{ end }}
+                    {{ if ne .total_files .total_folder_files }}
+                        <span style="opacity: 0.6; margin-left: 5px; font-weight: normal;">(of {{ .total_folder_files }})</span>
+                    {{ end }}
+                {{ end }}
             </span>
         </div>
-        
-        <!-- Row 3: Big Actions (Only if AI is enabled) -->
-        {% if enable_ai_search %}
-        <div class="mobile-big-actions">
-            <!-- Filters Button (Hidden during AI Search) -->
-            {% if not is_ai_search %}
-            <button type="button" id="mobile-filter-toggle" class="glass-btn filter-main-btn {% if active_filters_count > 0 %}active-blue{% endif %}">
-                🔍 Filters {% if active_filters_count > 0 %}({{ active_filters_count }}){% endif %}
-                {% if active_filters_count > 0 %}<span class="filter-reset-icon filter-reset-badge">✕</span>{% endif %}
-            </button>
-            {% endif %}
-            
-            <button type="button" id="ai-search-toggle-mobile" class="glass-btn {% if is_ai_search %}active-fuxia{% endif %}">
-                ✨ AI Search
-            </button>
-        </div>
-        {% endif %}
 
         <!-- Row 4: Icon Toolbar (Horizontal Scroll) -->
         <div class="mobile-icon-toolbar">
@@ -6411,66 +5268,46 @@
 
             <button type="button" class="glass-btn toggle-select-all-btn" onclick="toggleSelectAll()">✅</button>
             
-            {% if not is_ai_search %}
             <div class="btn-group">
-                <button type="button" onclick="applySort('date')" class="glass-btn {% if current_sort_by == 'date' %}active-blue{% endif %}">
-                   📅 {% if current_sort_by == 'date' %}<span style="font-size:0.7em;">{{ '↑' if current_sort_order == 'asc' else '↓' }}</span>{% endif %}
+                <button type="button" onclick="applySort('date')" class="glass-btn {{ if eq .current_sort_by `date` }}active-blue{{ end }}">
+                   📅 {{ if eq .current_sort_by `date` }}<span style="font-size:0.7em;">{{ if eq .current_sort_order `asc` }}↑{{ else }}↓{{ end }}</span>{{ end }}
                 </button>
-                <button type="button" onclick="applySort('name')" class="glass-btn {% if current_sort_by == 'name' %}active-blue{% endif %}">
-                   🔤 {% if current_sort_by == 'name' %}<span style="font-size:0.7em;">{{ '↑' if current_sort_order == 'asc' else '↓' }}</span>{% endif %}
+                <button type="button" onclick="applySort('name')" class="glass-btn {{ if eq .current_sort_by `name` }}active-blue{{ end }}">
+                   🔤 {{ if eq .current_sort_by `name` }}<span style="font-size:0.7em;">{{ if eq .current_sort_order `asc` }}↑{{ else }}↓{{ end }}</span>{{ end }}
                 </button>
             </div>
-            {% endif %}
         </div>
     </div>
-
-    <!-- === BANNERS === -->
-    {% if is_ai_search %}
-    <div class="ai-banner">
-        <div class="ai-banner-title" id="ai-banner-text" data-raw-query="{{ ai_query }}"><span>🧠</span> Loading AI Results...</div>
-        <div class="ai-banner-actions">
-            <button onclick="openAiSearchModal()" style="margin-right: 8px;">✏️ Edit</button>
-            <button onclick="window.location.href='{{ url_for('gallery_view', folder_key=current_folder_key) }}'">Exit AI Mode</button>
         </div>
     </div>
-    {% endif %}
-
-    {% if is_global_search and not is_ai_search %}
-   <!-- Element hidden for future use -->
-    <div class="global-search-banner" style="display: none !important;">
-        <div class="ai-banner-title"><span class="ai-scope-part"><span>🌐</span> Global Search Results</span><span class="ai-query-part">Showing all matches</span></div>
-        <div class="ai-banner-actions"><button onclick="window.location.href='{{ url_for('gallery_view', folder_key=current_folder_key) }}'">Exit Global Search</button></div>
-    </div>
-    {% endif %}
 
     <!-- === FILTER PANEL (FULL FORM) === -->
-    {% if not is_ai_search %}
     <div class="search-overlay-panel" id="desktop-search-panel">
-        <form method="GET" action="{{ url_for('gallery_view', folder_key=current_folder_key) }}" id="filter-form">
-            <input type="hidden" name="sort_by" value="{{ current_sort_by }}">
-            <input type="hidden" name="sort_order" value="{{ current_sort_order }}">
+        <form method="GET" action="/galleryout/view/{{ .current_folder_key }}" id="filter-form">
+            <input type="hidden" name="sort_by" value="{{ .current_sort_by }}">
+            <input type="hidden" name="sort_order" value="{{ .current_sort_order }}">
             
             <div class="filter-form-grid">
                 <!-- Search Scope -->
                 <div class="filter-group">
                     <label>Search Scope</label>
                     <div class="scope-options">
-                        <label class="scope-label {% if current_scope == 'local' %}active{% endif %}">
-                            <input type="radio" name="scope" value="local" {% if current_scope == 'local' %}checked{% endif %}> 📂 Current Folder
+                        <label class="scope-label {{ if eq .current_scope `local` }}active{{ end }}">
+                            <input type="radio" name="scope" value="local" {{ if eq .current_scope `local` }}checked{{ end }}> 📂 Current Folder
                         </label>
-                        <label class="scope-label {% if current_scope == 'global' %}active{% endif %}">
-                            <input type="radio" name="scope" value="global" {% if current_scope == 'global' %}checked{% endif %}> 🌐 Global (All)
+                        <label class="scope-label {{ if eq .current_scope `global` }}active{{ end }}">
+                            <input type="radio" name="scope" value="global" {{ if eq .current_scope `global` }}checked{{ end }}> 🌐 Global (All)
                         </label>
                     </div>
-                    <label class="recursive-wrapper {% if request.args.get('recursive') == 'true' %}active{% endif %}" id="recursive-standard-ui">
-                        <input type="checkbox" name="recursive" value="true" {% if request.args.get('recursive') == 'true' %}checked{% endif %} onchange="this.parentElement.classList.toggle('active', this.checked)">
+                    <label class="recursive-wrapper {{ if eq .request.args.recursive `true` }}active{{ end }}" id="recursive-standard-ui">
+                        <input type="checkbox" name="recursive" value="true" {{ if eq .request.args.recursive `true` }}checked{{ end }} onchange="this.parentElement.classList.toggle('active', this.checked)">
                         <span class="recursive-label">📂 Include Subfolders</span>
                     </label>
                 </div>
                 
-                <div class="filter-group"><label>🔍 Search by Name</label><input type="text" name="search" placeholder="Search files..." value="{{ request.args.get('search', '') }}"></div>
-                <div class="filter-group"><label>⚙️ Workflow Files</label><input type="text" name="workflow_files" placeholder="Models, LoRAs..." value="{{ request.args.get('workflow_files', '') }}"></div>
-                <div class="filter-group"><label>🎨 Prompt Keywords</label><input type="text" name="workflow_prompt" placeholder="Prompts..." value="{{ request.args.get('workflow_prompt', '') }}"></div>
+                <div class="filter-group"><label>🔍 Search by Name</label><input type="text" name="search" placeholder="Search files..." value="{{ .request.args.search }}"></div>
+                <div class="filter-group"><label>⚙️ Workflow Files</label><input type="text" name="workflow_files" placeholder="Models, LoRAs..." value="{{ .request.args.workflow_files }}"></div>
+                <div class="filter-group"><label>🎨 Prompt Keywords</label><input type="text" name="workflow_prompt" placeholder="Prompts..." value="{{ .request.args.workflow_prompt }}"></div>
 
                 <div class="filter-group">
                     <label>📄 Extensions</label>
@@ -6485,8 +5322,8 @@
 
                 <div class="filter-group">
                     <label>🏷️ Prefixes</label>
-                    <div id="prefix-warning-container" class="limit-warning-box" style="display: {% if prefix_limit_reached %}flex{% else %}none{% endif %};"><span class="limit-warning-icon">⚠️</span><span>Too many prefixes.</span></div>
-                    <div class="c-multi-select" id="wrapper-prefixes" style="display: {% if prefix_limit_reached %}none{% else %}block{% endif %};">
+                    <div id="prefix-warning-container" class="limit-warning-box" style="display: {{ if .prefix_limit_reached }}flex{{ else }}none{{ end }};"><span class="limit-warning-icon">⚠️</span><span>Too many prefixes.</span></div>
+                    <div class="c-multi-select" id="wrapper-prefixes" style="display: {{ if .prefix_limit_reached }}none{{ else }}block{{ end }};">
                         <button type="button" class="c-select-trigger" onclick="toggleCustomDropdown(event, 'dropdown-prefixes')">
                             <span class="trigger-text">Select prefixes...</span>
                             <span class="c-select-counter" id="count-prefixes">0</span>
@@ -6498,22 +5335,15 @@
                 <div class="filter-group">
                     <label>📅 Date Range</label>
                     <div class="date-row" style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <div style="flex: 1; min-width: 140px;"><label style="font-size: 0.7rem;">From:</label><input type="date" name="start_date" id="start-date" value="{{ request.args.get('start_date', '') }}"></div>
-                        <div style="flex: 1; min-width: 140px;"><label style="font-size: 0.7rem;">To:</label><input type="date" name="end_date" id="end-date" value="{{ request.args.get('end_date', '') }}"></div>
+                        <div style="flex: 1; min-width: 140px;"><label style="font-size: 0.7rem;">From:</label><input type="date" name="start_date" id="start-date" value="{{ .request.args.start_date }}"></div>
+                        <div style="flex: 1; min-width: 140px;"><label style="font-size: 0.7rem;">To:</label><input type="date" name="end_date" id="end-date" value="{{ .request.args.end_date }}"></div>
                     </div>
                 </div>
 
                 <div class="filter-group">
                     <label>Options</label>
-                    <div class="filter-group-inline"><input type="checkbox" name="favorites" id="favorites-check" value="true" {% if request.args.get('favorites') == 'true' %}checked{% endif %}><label for="favorites-check">⭐ Favorites Only</label></div>
-                    <div class="filter-group-inline"><input type="checkbox" name="no_workflow" id="no-workflow-check" value="true" {% if request.args.get('no_workflow') == 'true' %}checked{% endif %}><label for="no-workflow-check">🚫 No Workflow</label></div>
-                     <!-- No AI Caption (Only if AI is enabled) -->
-                    {% if enable_ai_search %}
-                    <div class="filter-group-inline">
-                        <input type="checkbox" name="no_ai_caption" id="no-ai-check" value="true" {% if request.args.get('no_ai_caption') == 'true' %}checked{% endif %}>
-                        <label for="no-ai-check">🧠 Missing AI Caption</label>
-                    </div>
-                    {% endif %}
+                    <div class="filter-group-inline"><input type="checkbox" name="favorites" id="favorites-check" value="true" {{ if eq .request.args.favorites `true` }}checked{{ end }}><label for="favorites-check">⭐ Favorites Only</label></div>
+                    <div class="filter-group-inline"><input type="checkbox" name="no_workflow" id="no-workflow-check" value="true" {{ if eq .request.args.no_workflow `true` }}checked{{ end }}><label for="no-workflow-check">🚫 No Workflow</label></div>
                 </div>
                 
                 <div class="filter-group">
@@ -6524,7 +5354,7 @@
                             🔍 Apply Filters
                         </button>
                         <!-- Reset Button (Secondary) -->
-                        <a href="{{ url_for('gallery_view', folder_key=current_folder_key) }}" class="glass-btn btn-reset">
+                        <a href="/galleryout/view/{{ .current_folder_key }}" class="glass-btn btn-reset">
                             🗑️ Reset Filters
                         </a>
                     </div>
@@ -6532,12 +5362,11 @@
             </div>
         </form>
     </div>
-    {% endif %}
     
         <div id="gallery-anchor"></div>
         <main class="gallery-container" id="gallery-container"></main>
         <!-- Load More Button with Logic Check -->
-        <div id="load-more-container" {% if total_files <= files|length %}style="display:none;"{% endif %}>
+        <div id="load-more-container" {{ if le .total_files (len .files) }}style="display:none;"{{ end }}>
             <button id="load-more-btn">
                 <span>Load More / Scroll Down</span>
                 <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -6578,7 +5407,7 @@
         <!-- Right: Primary Actions -->
         <div class="sel-bar-actions">
             <!-- Range Select -->
-            <button id="range-select-btn" class="sel-btn" title="Select Range between files" style="display:none; color: var(--ai-color);">↔️</button>
+            <button id="range-select-btn" class="sel-btn" title="Select Range between files" style="display:none; color: var(--primary-color);">↔️</button>
             <!-- Favorite (Quick Access) -->
             <button id="favorite-selected-btn" class="sel-btn" title="Add to Favorites">⭐</button>
             
@@ -6591,10 +5420,6 @@
 
         <!-- Hidden Drop-up Menu -->
         <div class="sel-more-menu" id="sel-more-menu">
-            {% if enable_ai_search %}
-            <button id="index-selected-btn" onclick="indexSelectedFiles()">🧠 Index AI Data</button>
-            <div class="sel-separator"></div>
-            {% endif %}
             <button id="compare-menu-btn" onclick="startCompareMode()" style="display:none;">⚖️ Compare</button>
             <div id="compare-menu-sep" class="sel-separator" style="display:none;"></div>
             <button id="copy-selected-btn">Cc Copy to Folder...</button>
@@ -6617,15 +5442,9 @@
                 <button id="lightbox-zoom-out" title="Zoom Out">-</button>
                 <button id="lightbox-zoom-in" title="Zoom In">+</button>
                 
-                {% if enable_ai_search %}
-                <button id="lightbox-index-btn" title="Force AI Re-Indexing" onclick="indexCurrentLightboxFile()" style="border-color:var(--ai-color); color:var(--ai-color);">⚡</button>
-                <button id="lightbox-reset-ai-btn" title="Erase AI Data Only" onclick="resetAiDataCurrentLightbox()" style="border-color:var(--danger-color); color:var(--danger-color); display:none;">❌</button>
-                {% endif %}
-                
                 <a id="lightbox-download" href="#" title="Download File">💾</a>
                 <button id="lightbox-rename-btn" title="Rename File">✏️</button>
                 <button id="lightbox-summary-btn" title="Node Summary">📝</button>
-                <button id="lightbox-caption-icon" title="View AI Caption" style="display:none;">🧠</button>
                 <a id="lightbox-workflow" href="#" class="workflow-btn" title="Download Workflow">⚙️</a>
                 <button id="lightbox-filmstrip-btn" title="Generate Storyboard" onclick="openStoryboard(null)" style="display:none;">🎞️</button>
                 <button id="lightbox-copy-json" title="Copy Workflow to Clipboard" style="display:none;">📋</button>
@@ -6644,8 +5463,6 @@
                     👁️ <span>Hide Toolbar</span>
                 </button>
             </div>
-
-            <div id="lightbox-ai-caption"></div>
         </div>
 
         <button id="lightbox-prev" class="lightbox-nav">‹</button>
@@ -6687,15 +5504,10 @@
             </div>
             <div class="shortcuts-content" style="grid-template-columns: 1fr;">
                 <div class="shortcut-item"><span class="key">-</span> / <span class="key">+</span> <span class="desc">Zoom Out / Zoom In</span></div>
-                {% if enable_ai_search %}
-                <div class="shortcut-item"><span class="key" style="color:var(--ai-color)">⚡</span> <span class="desc">Force AI Re-Indexing (Vision Analysis)</span></div>
-                <div class="shortcut-item"><span class="key" style="color:var(--danger-color)">❌</span> <span class="desc">Erase AI Data (Captions/Embeddings)</span></div>
-                {% endif %}
                 <div class="shortcut-item"><span class="key">💾</span> <span class="desc">Download Media File</span></div>
                 <div class="shortcut-item"><span class="key">✏️</span> <span class="desc">Rename File (Keep extension)</span></div>
                 <div class="shortcut-item"><span class="key">📝</span> <span class="desc">View Node Summary (Parameters)</span></div>
                 <div class="shortcut-item"><span class="key">🎞️</span> <span class="desc">Generate Video Storyboard</span></div>
-                <div class="shortcut-item"><span class="key" style="color:var(--ai-color)">🧠</span> <span class="desc">Show/Hide AI Generated Caption</span></div>
                 <div class="shortcut-item"><span class="key">⚙️</span> <span class="desc">Download Workflow JSON</span></div>
                 <div class="shortcut-item"><span class="key">📋</span> <span class="desc">Copy Workflow to Clipboard</span></div>
                 <div class="shortcut-item"><span class="key">🗑️</span> <span class="desc">Delete File</span></div>
@@ -6736,349 +5548,6 @@
             </div>
         </div>
     </div>
-    <!-- AI INDEXING OPTIONS MODAL -->
-    <div id="ai-options-modal">
-        <div class="ai-options-panel">
-            <div class="ai-opt-header"><span>🧠</span> Indexing Options</div>
-            
-            <div class="ai-path-preview" id="ai-opt-path">...</div>
-            
-            <!-- SECTION A: Standard Controls (For new folders, or re-indexing implicit ones) -->
-            <div id="ai-opt-standard-controls">
-                
-                <!-- Implicit Watch Message (Hidden by default) -->
-                <div id="ai-opt-implicit-msg" style="display:none; background:rgba(0, 123, 255, 0.1); border:1px solid var(--primary-color); padding:10px; border-radius:8px; margin-bottom:15px; font-size:0.9rem; color:#ccc;">
-                    👁️ This folder is monitored by a <strong>Parent Folder</strong>.<br>
-                    You can force a re-index here, but watch settings are managed by the parent.
-                </div>
-
-                <!-- Recursive Option -->
-                <div class="ai-opt-row">
-                    <label for="ai-opt-recursive" style="cursor:pointer; font-weight:bold;">Include Subfolders</label>
-                    <input type="checkbox" id="ai-opt-recursive" style="width:20px; height:20px; accent-color:var(--ai-color);">
-                </div>
-                <span class="ai-opt-desc">If checked, processes all nested folders.</span>
-
-                <!-- Watch Option (Container to hide it easily) -->
-                <div id="ai-opt-watch-container">
-                    <div class="ai-opt-row">
-                        <label for="ai-opt-watch" style="cursor:pointer; font-weight:bold;">Add to Watch List</label>
-                        <input type="checkbox" id="ai-opt-watch" style="width:20px; height:20px; accent-color:var(--success-color);">
-                    </div>
-                    <span class="ai-opt-desc">Monitor for new files in the future.</span>
-                </div>
-
-                <!-- Force Option -->
-                <div class="ai-opt-row" style="margin-top:10px;">
-                    <label for="ai-opt-force" style="cursor:pointer; font-weight:bold;">Force Re-Index</label>
-                    <input type="checkbox" id="ai-opt-force" style="width:20px; height:20px; accent-color:var(--danger-color);">
-                </div>
-                <span class="ai-opt-desc">Reprocess files even if they already have AI data.</span>
-            </div>
-
-            <!-- SECTION B: Explicitly Watched Controls (Only for Root Watch Folders) -->
-            <div id="ai-opt-watched-controls" style="display:none;">
-                <p style="color:var(--favorite-color); font-weight:bold; margin-top:0;">👁️ This folder is explicitly monitored.</p>
-                <p style="font-size:0.9rem; color:#ccc;">You cannot add it again, but you can stop monitoring it.</p>
-                
-                <button class="nav-btn" onclick="stopWatchingFromModal()" 
-                        style="background:var(--danger-color); color:white; width:100%; margin-top:10px; border:1px solid var(--danger-color);">
-                    🚫 Stop Watching & Remove
-                </button>
-            </div>
-
-            <div class="ai-opt-actions" style="justify-content: space-between; margin-top: 20px;">
-                <!-- Left Side: Erase -->
-                <button class="nav-btn nav-btn-danger-outline" onclick="confirmAiReset()">🗑️ Erase AI Data</button>
-                
-                <!-- Right Side: Standard Actions -->
-                <div style="display:flex; gap:10px;">
-                    <button class="nav-btn nav-btn-cancel" onclick="closeAiOptions()">Cancel</button>
-                    <button id="ai-opt-start-btn" class="nav-btn nav-btn-primary" onclick="confirmAiIndex()" style="background:var(--ai-gradient);">Start Indexing</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- AI MANAGER OVERLAY (Nuovo) -->
-    <div id="ai-manager-overlay">
-        <div class="ai-manager-panel">
-            <div class="ai-manager-header">
-                <h2>🧠 AI Indexing Manager</h2>
-                <button class="ai-manager-close" onclick="toggleAiManager(false)">×</button>
-            </div>
-            <div class="ai-manager-tabs">
-                <button class="ai-tab-btn active" onclick="switchAiTab('queue')">Queue & Status</button>
-                <button class="ai-tab-btn" onclick="switchAiTab('watched')">Watched Folders</button>
-                <button class="ai-tab-btn" onclick="switchAiTab('settings')">Settings</button>
-            </div>
-            <div class="ai-manager-content">
-                <!-- TAB: QUEUE -->
-                <div id="ai-tab-queue" class="ai-tab-content active">
-                    
-                    <div id="ai-gpu-warning" class="gpu-warning">
-                        <span>⚠️ <strong>GPU High Load!</strong> Paused to protect ComfyUI generation. Will resume automatically.</span>
-                    </div>
-
-                   <div class="ai-status-bar">
-                        <div class="ai-stat-item">
-                            <!-- Wrap text and dots in a flex container for alignment -->
-                            <div style="display:flex; align-items:center; justify-content:center;">
-                                <span class="ai-stat-val" id="ai-stat-status">Idle</span>
-                                <!-- Animated Dots Container -->
-                                <div id="ai-status-anim" class="ai-working-dots" style="display:none;">
-                                    <div class="ai-dot"></div>
-                                    <div class="ai-dot"></div>
-                                    <div class="ai-dot"></div>
-                                </div>
-                            </div>
-                            <span class="ai-stat-lbl">Status</span>
-                        </div>
-                        <div class="ai-stat-item">
-                            <span class="ai-stat-val" id="ai-stat-pending">0</span>
-                            <span class="ai-stat-lbl">Total Pending</span>
-                        </div>
-                         <div class="ai-stat-item">
-                            <span class="ai-stat-val" id="ai-stat-time">0s</span>
-                            <span class="ai-stat-lbl">Avg Time/File</span>
-                        </div>
-                    </div>
-
-                    <div class="ai-progress-wrapper">
-                        <div class="ai-progress-text">
-                            <span id="ai-current-file">No active job</span>
-                            <span id="ai-progress-percent">0%</span>
-                        </div>
-                        <div class="ai-progress-track">
-                            <div class="ai-progress-fill" id="ai-progress-bar"></div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">UP NEXT (Preview):</label>
-                        <div id="ai-queue-preview" class="ai-queue-list-container">
-                            <div style="padding:10px; text-align:center; color:#555;">Queue empty</div>
-                        </div>
-                    </div>
-
-                    <div class="ai-controls-row">
-                        <!-- Combined Toggle Button -->
-                        <button id="ai-toggle-pause" class="state-running" onclick="toggleAiPause()">
-                            ⏸ Pause
-                        </button>
-                        
-                        <button class="ai-btn-action ai-btn-danger" onclick="controlAiQueue('clear')">🗑 Clear Queue</button>
-                    </div>
-                </div>
-                <!-- TAB: WATCHED -->
-                <div id="ai-tab-watched" class="ai-tab-content">
-                    <p style="color:var(--text-muted)">Folders monitored for auto-indexing:</p>
-                    <div id="watched-folders-list" style="border:1px solid var(--border-color); border-radius:8px; overflow:hidden;">
-                        <div style="padding:20px; text-align:center;">Loading...</div>
-                    </div>
-                </div>
-                <!-- TAB: SETTINGS -->
-                <!-- TAB: SETTINGS -->
-                <div id="ai-tab-settings" class="ai-tab-content">
-                    <div class="ai-settings-grid">
-                        
-                        <!-- Precision Setting -->
-                        <div class="ai-options-group">
-                            <div class="ai-group-title">⚡ Precision Mode</div>
-                            <div class="ai-group-desc">
-                                Select calculation accuracy. Use <strong>FP16</strong> for speed (recommended for RTX cards). Use <strong>FP32</strong> only for compatibility.
-                            </div>
-                            
-                            <div class="ai-radio-grid">
-                                <!-- Option 1: FP16 -->
-                                <label>
-                                    <input type="radio" name="ai_precision" value="fp16" class="ai-radio-input" checked>
-                                    <div class="ai-radio-card">
-                                        <div class="ai-check-icon">✓</div>
-                                        <span class="ai-opt-name">FP16</span>
-                                        <span class="ai-opt-sub">Half Precision</span>
-                                        <span class="ai-opt-sub" style="color:var(--success-color); margin-top:4px;">Recommended</span>
-                                    </div>
-                                </label>
-                                
-                                <!-- Option 2: FP32 -->
-                                <label>
-                                    <input type="radio" name="ai_precision" value="fp32" class="ai-radio-input">
-                                    <div class="ai-radio-card">
-                                        <div class="ai-check-icon">✓</div>
-                                        <span class="ai-opt-name">FP32</span>
-                                        <span class="ai-opt-sub">Full Precision</span>
-                                        <span class="ai-opt-sub" style="color:var(--text-muted); margin-top:4px;">Slower / Safe</span>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Beams Setting -->
-                        <div class="ai-options-group">
-                            <div class="ai-group-title">🎯 Analysis Depth (Beams)</div>
-                            <div class="ai-group-desc">
-                                Controls how many variations the AI explores. Higher values catch more details but are slower.
-                            </div>
-                            
-                            <div class="ai-radio-grid">
-                                <!-- Beam 3 (First Option) -->
-                                <label>
-                                    <input type="radio" name="ai_beams" value="3" class="ai-radio-input" checked>
-                                    <div class="ai-radio-card">
-                                        <div class="ai-check-icon">✓</div>
-                                        <span class="ai-opt-name">3 Beams</span>
-                                        <span class="ai-opt-sub">Best Quality</span>
-                                        <span class="ai-opt-sub" style="color:var(--ai-color); margin-top:4px;">Slowest</span>
-                                    </div>
-                                </label>
-
-                                <!-- Beam 2 -->
-                                <label>
-                                    <input type="radio" name="ai_beams" value="2" class="ai-radio-input">
-                                    <div class="ai-radio-card">
-                                        <div class="ai-check-icon">✓</div>
-                                        <span class="ai-opt-name">2 Beams</span>
-                                        <span class="ai-opt-sub">Balanced</span>
-                                    </div>
-                                </label>
-
-                                <!-- Beam 1 (Last Option) -->
-                                <label>
-                                    <input type="radio" name="ai_beams" value="1" class="ai-radio-input">
-                                    <div class="ai-radio-card">
-                                        <div class="ai-check-icon">✓</div>
-                                        <span class="ai-opt-name">1 Beam</span>
-                                        <span class="ai-opt-sub">Fastest</span>
-                                        <span class="ai-opt-sub" style="color:var(--text-muted); margin-top:4px;">Less Detail</span>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    
-    <!-- AI Search Modal -->
-    <div id="ai-search-overlay">
-        <div class="ai-modal-panel">
-            <button class="ai-modal-close" id="ai-modal-close">×</button>
-            <div class="ai-modal-header">
-                <h2>🧠 Semantic Search</h2>
-                <p style="color: #ccc; margin-top: 5px;">Powered by SmartGallery AI</p>
-            </div>
-            
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <div class="ai-search-options-row">
-                    <div style="flex:1;">
-                        <label style="color: #fff; font-weight: bold; display:block; margin-bottom:5px;">Search Scope:</label>
-                        <div class="ai-scope-selector">
-                            <div class="ai-scope-option active" data-scope="global" onclick="selectAiScope('global')">Global (All)</div>
-                            <div class="ai-scope-option" data-scope="local" onclick="selectAiScope('local')">Current Folder</div>
-                        </div>
-                        <!-- NEW: Recursive Toggle for AI (hidden by default, shown by JS when local is selected) -->
-                        <label class="recursive-wrapper" id="ai-recursive-toggle" style="display:none; margin-top:10px; width:100%; justify-content:center;">
-                            <input type="checkbox" id="ai-search-recursive" value="true">
-                            <span class="recursive-label">📂 Include Subfolders</span>
-                        </label>
-                        
-                    </div>
-                    <div>
-                        <label style="color: #fff; font-weight: bold; display:block; margin-bottom:5px;">Max Results:</label>
-                        <div class="ai-limit-container">
-                            <!-- Minus Button -->
-                            <button class="ai-limit-btn" onclick="adjustAiLimit(-50)">-</button>
-                            
-                            <!-- Input (native arrows hidden via CSS) -->
-                            <input type="number" id="ai-search-limit" class="ai-limit-input" value="100" min="10" max="1000" step="10">
-                            
-                            <!-- Plus Button -->
-                            <button class="ai-limit-btn" onclick="adjustAiLimit(50)">+</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div>
-                <div class="ai-input-wrapper">
-                    <textarea id="ai-search-input" class="ai-search-textarea" placeholder="Describe what you are looking for in English..."></textarea>
-                    <button id="ai-search-clear-text" title="Clear Query">×</button>
-                </div>
-            </div>
-            
-            <button id="ai-search-submit" class="ai-search-submit">Search</button>
-        </div>
-    </div>
-
-    <!-- AI INFO / PROMO MODAL -->
-    <div id="ai-info-overlay">
-        <div class="ai-info-panel">
-            <button class="ai-info-close" onclick="closeAiInfoModal()">×</button>
-            
-            <div class="ai-hero-icon">🧠✨</div>
-            <h2 class="ai-info-title">Enable Semantic AI <span style="font-size:0.6em; color:#fff; font-weight:normal;">(Free & Local)</span></h2>
-            
-            <!-- STATUS ALERT BOX -->
-            <div class="ai-status-alert">
-                ⚠️ <strong>AI is currently disabled.</strong><br>
-                Your environment variable is detected as: <code>ENABLE_AI_SEARCH=False</code>
-                <p class="ai-info-text">
-                    To unlock the AI features, you need to set the variable to <code>true</code>. 
-                    Depending on your current installation, follow the steps below:
-                </p>
-
-            </div>
-
-            <div class="ai-comparison-box">
-                <h3 style="margin-top:0; color:white;">Activation Guide:</h3>
-                
-                <!-- SCENARIO A: GIÀ INSTALLATO -->
-                <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                    <strong>🔹 Case A: You already have the AI files</strong><br>
-                    <span style="font-size: 0.9rem; color: #bbb;">(You previously downloaded the full AI version)</span><br>
-                    <p style="margin: 5px 0 0 0;">
-                        You just need to set <code>ENABLE_AI_SEARCH=true</code> in your startup script or environment and restart. No new downloads required.
-                    </p>
-                </div>
-
-                <!-- SCENARIO B: NUOVA INSTALLAZIONE -->
-                <div>
-                    <strong>🔹 Case B: You are on the Light Version</strong><br>
-                    <span style="font-size: 0.9rem; color: #bbb;">(First time enabling AI)</span><br>
-                    <ol class="ai-steps-list" style="margin-top: 5px; margin-bottom: 0;">
-                        <li>
-                            <strong>Upgrade:</strong> Read the instructions & Install the Full AI Configuration from our GitHub repo ->  
-                            <a href="https://github.com/biagiomaf/smart-comfyui-gallery" target="_blank" style="color:var(--ai-color); word-break: break-all;">*here*</a> 
-                        </li>
-                        <li><strong>Activate:</strong> Set ENABLE_AI_SEARCH=true and restart.</li>
-                    </ol>
-                </div>
-            </div>
-
-            <!-- SEMANTIC SEARCH EXPLANATION (COLLAPSIBLE) -->
-            <details class="ai-details">
-                <summary>🤔 What is Semantic Search? (Read More)</summary>
-                <div class="ai-details-content">
-                    <p>Standard search only looks for exact filenames (e.g., <code>img_001.png</code>). Semantic Search is different: it <strong>understands</strong> the content of your image.</p>
-                    <p>Using <strong>Florence-2</strong> (Vision) and <strong>Nomic</strong> (Embeddings), the system scans your images and creates a mathematical map of their meaning.</p>
-                    <p>This allows you to search for concepts like <em>"a cyberpunk city in the rain"</em> or <em>"red flowers on a table"</em>, even if those words are not in the filename. We are thrilled to bring this advanced technology to your local machine!</p>
-                </div>
-            </details>
-                
-            <p style="font-size: 1.2rem; color: #aaa; margin-bottom: 1.5rem;">
-                🛡️ <strong>Privacy Guaranteed:</strong> Our AI models run <strong>100% locally</strong>. 
-                No external API calls. Your images never leave your computer.
-            </p>
-
-            <a href="https://github.com/biagiomaf/smart-comfyui-gallery" target="_blank" class="ai-cta-btn">
-                🚀 View Installation Guide
-            </a>
-        </div>
-    </div>
-    
     <div id="rescan-modal-overlay"
         style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:2400;display:flex;justify-content:center;align-items:center;opacity:0;pointer-events:none;transition:opacity 0.3s;">
         <div
@@ -7364,30 +5833,24 @@
     
     <script>
         // --- DATA INITIALIZATION AND GLOBAL STATE ---
-        const foldersData = {{ folders | tojson }};
-        const ffmpegAvailable = {{ ffmpeg_available | tojson }};
-        const streamThresholdBytes = {{ stream_threshold }}; 
-        const currentFolderInfo = {{ current_folder_info | tojson }};
-        const protectedFolderKeys = {{ protected_folder_keys | tojson }};
-        const initialFiles = {{ files | tojson }};
-        let totalFiles = {{ total_files }};
-        let totalFolderFiles = {{ total_folder_files }};
-        const currentFolderKey = '{{ current_folder_key }}';
-        const ancestorKeys = {{ ancestor_keys | tojson }};
+        const foldersData = {{ .folders | tojson }};
+        const ffmpegAvailable = {{ .ffmpeg_available | tojson }};
+        const streamThresholdBytes = {{ .stream_threshold }}; 
+        const currentFolderInfo = {{ .current_folder_info | tojson }};
+        const protectedFolderKeys = {{ .protected_folder_keys | tojson }};
+        const initialFiles = {{ .files | tojson }};
+        let totalFiles = {{ .total_files }};
+        let totalFolderFiles = {{ .total_folder_files }};
+        const currentFolderKey = '{{ .current_folder_key }}';
+        const ancestorKeys = {{ .ancestor_keys | tojson }};
         // --- USER PREFERENCES (LocalStorage) ---
         // Default to FALSE (OFF) if not set. User must explicitly enable it.
         // We check if it equals 'true' string.
         let videoAutoplay = localStorage.getItem('sg_videoAutoplay') === 'true';
         // Grid Size Preference (Default: 'normal')
         let gridSizePref = localStorage.getItem('sg_gridSize') || 'normal';
-         // --- AI SEARCH VARIABLES ---
-        const enableAiSearch = {{ enable_ai_search | tojson }};
-        const isAiSearch = {{ is_ai_search | tojson }};
-        const isGlobalSearch = {{ is_global_search | tojson }};
-        const activeFiltersCount = {{ active_filters_count }};
-        const rawAiQuery = {{ ai_query | tojson }};
-        const isAiGlobal = isAiSearch && (rawAiQuery && rawAiQuery.indexOf(" ||| ") === -1);
-        let currentAiScope = 'global'; 
+        const isGlobalSearch = {{ .is_global_search | tojson }};
+        const activeFiltersCount = {{ .active_filters_count }};
 
         const galleryContainer = document.getElementById('gallery-container');
         const selectionBar = document.getElementById('selection-bar');
@@ -7402,9 +5865,82 @@
         let currentSearch = { nav: '', move: '' };
         let focusedItemIndex = -1;
         let hoveredItemIndex = -1;
+        let focusRafId = 0;
+        let pendingFocusItem = null;
         let currentDropAction = 'move'; // 'move' or 'copy'
         let copyKeepFavorites = false; // Store user choice
         let isFilmstripDragging = false;
+        let isTopbarCollapsed = localStorage.getItem('sg_topbarCollapsed') === 'true';
+        
+        function reindexGalleryItems(startIndex = 0) {
+            for (let i = startIndex; i < galleryItems.length; i++) {
+                const it = galleryItems[i];
+                if (!it) continue;
+                it._galleryIndex = i;
+                it.dataset.galleryIndex = i;
+            }
+        }
+        
+        function scheduleFocusSync(item) {
+            pendingFocusItem = item;
+            if (focusRafId) return;
+            focusRafId = requestAnimationFrame(() => {
+                focusRafId = 0;
+                const target = pendingFocusItem;
+                pendingFocusItem = null;
+                if (!target) return;
+                
+                const idx = target._galleryIndex;
+                if (typeof idx !== 'number' || idx < 0) return;
+                
+                if (focusedItemIndex !== -1 && galleryItems[focusedItemIndex]) {
+                    galleryItems[focusedItemIndex].classList.remove('focused');
+                }
+                focusedItemIndex = idx;
+                if (galleryItems[focusedItemIndex]) {
+                    galleryItems[focusedItemIndex].classList.add('focused');
+                }
+            });
+        }
+        
+        function applyTopbarState(collapsed) {
+            document.body.classList.toggle('topbar-collapsed', collapsed);
+            localStorage.setItem('sg_topbarCollapsed', collapsed ? 'true' : 'false');
+            
+            const btn1 = document.getElementById('topbar-toggle-btn');
+            const btnMob = document.getElementById('topbar-toggle-btn-mob');
+            const btn2 = document.getElementById('topbar-toggle-btn-peek');
+            const title = collapsed ? 'Expand Toolbar' : 'Collapse Toolbar';
+            const icon = collapsed ? '▼' : '▲';
+            
+            if (btn1) {
+                btn1.title = title;
+                btn1.textContent = icon;
+            }
+            if (btnMob) {
+                btnMob.title = title;
+                btnMob.textContent = icon;
+            }
+            if (btn2) {
+                btn2.title = title;
+                btn2.textContent = icon;
+            }
+        }
+        
+        function toggleTopbar() {
+            isTopbarCollapsed = !isTopbarCollapsed;
+            applyTopbarState(isTopbarCollapsed);
+        }
+        
+        function initTopbar() {
+            applyTopbarState(isTopbarCollapsed);
+            const btn1 = document.getElementById('topbar-toggle-btn');
+            const btnMob = document.getElementById('topbar-toggle-btn-mob');
+            const btn2 = document.getElementById('topbar-toggle-btn-peek');
+            if (btn1) btn1.addEventListener('click', (e) => { e.stopPropagation(); toggleTopbar(); });
+            if (btnMob) btnMob.addEventListener('click', (e) => { e.stopPropagation(); toggleTopbar(); });
+            if (btn2) btn2.addEventListener('click', (e) => { e.stopPropagation(); toggleTopbar(); });
+        }
 
         // --- UI STATE PERSISTENCE MANAGEMENT ---
         const savedSort = localStorage.getItem('gallerySortPreference');
@@ -7567,55 +6103,6 @@
                 notification.addEventListener('transitionend', () => notification.remove()); 
             }, duration); 
         }
-        // --- GLOBAL WORKER MONITOR ---
-        // Checks if items are stuck in 'Queued' state without being picked up by the worker
-        let workerStuckCounter = 0;
-        let workerAlertShown = false;
-
-        function startGlobalWorkerMonitor() {
-            if (!enableAiSearch) return;
-
-            // Lightweight check every 10 seconds
-            setInterval(async () => {
-                // If we already warned the user once this session, stop checking logic
-                if (workerAlertShown) return;
-
-                try {
-                    const res = await fetch('/galleryout/ai_indexing/status');
-                    const data = await res.json();
-
-                    // LOGIC: 
-                    // 1. Are there pending items? (data.pending_count > 0)
-                    // 2. Is the global status specifically 'Queued'? (data.global_status === 'Queued')
-                    // 'Queued' means items are in DB but Worker hasn't switched status to 'Indexing' yet.
-                    // If it stays 'Queued' for too long, the worker is likely down.
-                    if (data.pending_count > 0 && data.global_status === 'Queued') {
-                        workerStuckCounter++;
-                    } else {
-                        // Reset counter if queue is empty OR if status is 'Indexing' (Worker is active)
-                        // Also resets if status is 'Paused' or 'waiting_gpu' (valid idle states)
-                        workerStuckCounter = 0;
-                    }
-
-                    // TRIGGER ALERT: If stuck for 3 cycles (approx 30 seconds)
-                    if (workerStuckCounter >= 3) {
-                        workerAlertShown = true; 
-                        
-                        const msg = "⚠️ AI WORKER ALERT\n" +
-                                    "Items are pending but the AI Service is not responding.\n" +
-                                    "Please check if the worker terminal is running.";
-                        
-                        // Show generic error notification for 10 seconds
-                        showNotification(msg, "error", 10000);
-                    }
-
-                } catch (e) {
-                    // Silent catch (e.g. network error), don't annoy user unless persistent
-                    console.warn("Monitor check skipped");
-                }
-            }, 10000); // Check every 10 seconds
-        }
-        
         function handleError(error) { console.error('API Error:', error); showNotification(error.message || 'An unexpected network error occurred.', 'error'); }
         function handleGenericResponse(response) { 
             return response.json().then(data => { 
@@ -7688,7 +6175,7 @@
             if (isMovePanel) {
                 const isRecursive = document.querySelector('input[name="recursive"]')?.checked || false;
                 // Disable move to current folder unless copying, global/AI search, or recursive
-                const shouldDisable = (currentDropAction !== 'copy' && folderKey === currentFolderKey && !isAiGlobal && !isGlobalSearch && !isRecursive);
+                const shouldDisable = (currentDropAction !== 'copy' && folderKey === currentFolderKey && !isGlobalSearch && !isRecursive);
                 const disabledAttr = shouldDisable ? 'disabled' : '';
 
                 itemHTML = `
@@ -7703,10 +6190,6 @@
                 let actionsHTML = '';
                 
                 if (folderKey !== '_root_' && !protectedFolderKeys.includes(folderKey)) {
-                    const aiBtn = enableAiSearch 
-                        ? `<button onclick="indexFolder('${folderKey}')">🧠 AI Index</button>` 
-                        : '';
-                    
                     // --- MOUNT POINT BUTTON LOGIC ---
                     let deleteOption = '';
                     if (folder.is_mount) {
@@ -7720,7 +6203,6 @@
                             <button class="folder-menu-btn" onclick="event.stopPropagation(); toggleFolderMenu(this)">⋮</button>
                             <div class="folder-dropdown">
                                 <button onclick="showFolderInfo(event, '${folderKey}')">ℹ️ Info</button>
-                                ${aiBtn}
                                 ${!folder.is_mount ? `<button onclick="renameFolder(event, '${folderKey}', '${folderDisplayName}')">✏️ Rename</button>` : ''}
                                 ${deleteOption}
                             </div>
@@ -7984,7 +6466,7 @@
                     } 
                     
                     if (syncOverlay.style.display === 'flex') { 
-                        syncMessage.textContent = data.message; 
+                        syncMessage.textContent = data.message || 'Syncing...'; 
                         if (data.total > 0) { 
                             syncProgressFill.style.width = `${(data.current / data.total) * 100}%`; 
                         } 
@@ -8000,6 +6482,11 @@
                         }
                     } else if (data.status === 'reloading') { 
                         cleanupAndClose(true); 
+                    } else if (data.status === 'done') {
+                        if (isManualRefresh && !isSilent) {
+                            syncProgressFill.style.width = '100%';
+                        }
+                        cleanupAndClose(false);
                     } else if (data.error) { 
                         if(!isSilent) syncProgressFill.style.backgroundColor = 'var(--danger-color)'; 
                         cleanupAndClose(false); 
@@ -8010,7 +6497,13 @@
                 } 
             }; 
             
-            eventSource.onerror = function () { eventSource.close(); }; 
+            eventSource.onerror = function () {
+                eventSource.close();
+                if (!isSilent) {
+                    syncProgressFill.style.backgroundColor = 'var(--danger-color)';
+                    setTimeout(() => { syncOverlay.style.display = 'none'; }, isManualRefresh ? 1200 : 0);
+                }
+            }; 
         }
         // --- AUTO REFRESH LOGIC (Body Append Version) ---
         let autoRefreshTimer = null;
@@ -8175,15 +6668,13 @@
         }
         
         function formatBytes(bytes, decimals = 1) { if (!bytes) return '0 B'; const k = 1024; const dm = decimals < 0 ? 0 : decimals; const sizes = ['B', 'KB', 'MB', 'GB', 'TB']; const i = Math.floor(Math.log(bytes) / Math.log(k)); return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]; }
-        function appendFiles(files) { if (!files || files.length === 0) { if (currentItemCount === 0) showEmptyState(); updateLoadMoreVisibility(); return; } const fragment = document.createDocumentFragment(); const newLazyElements = []; files.forEach(file => { allFilesData.push(file); const item = createGalleryItem(file); fragment.appendChild(item); galleryItems.push(item); const lazyEl = item.querySelector('.lazy'); if (lazyEl) newLazyElements.push(lazyEl); }); galleryContainer.appendChild(fragment); initializeLazyLoading(newLazyElements); currentItemCount += files.length; updateLoadMoreVisibility(); }
+        function appendFiles(files) { if (!files || files.length === 0) { if (currentItemCount === 0) showEmptyState(); updateLoadMoreVisibility(); return; } const fragment = document.createDocumentFragment(); const newLazyElements = []; files.forEach(file => { allFilesData.push(file); const item = createGalleryItem(file); fragment.appendChild(item); galleryItems.push(item); const idx = galleryItems.length - 1; item._galleryIndex = idx; item.dataset.galleryIndex = idx; const lazyEl = item.querySelector('.lazy'); if (lazyEl) newLazyElements.push(lazyEl); }); galleryContainer.appendChild(fragment); initializeLazyLoading(newLazyElements); currentItemCount += files.length; updateLoadMoreVisibility(); }
         function createGalleryItem(file) {
             const item = document.createElement('div');
             item.className = 'gallery-item';
             if (isGlobalSearch) item.classList.add('ai-global'); // reuse global style
             item.dataset.fileId = file.id;
             item.dataset.fileType = file.type;
-            item.dataset.aiCaption = file.ai_caption || '';
-            item.dataset.aiDate = file.ai_last_scanned || 0;
             item.setAttribute('draggable', 'true');
             item.addEventListener('dragstart', (event) => dragStart(event, file.id));
             let mediaHTML = '';
@@ -8250,20 +6741,12 @@
                 scannedHTML = `<div class="file-scanned-time" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; opacity: 0.8;">🔍 Scanned: ${formattedScannedDate}</div>`;
             }
             
-            // AI Score Badge
-            let aiBadgeHTML = '';
-            if (isAiSearch && file.score) {
-                const percentage = Math.round(file.score * 100);
-                aiBadgeHTML = `<div class="ai-badge">score ${percentage}%</div>`;
-            }
-
             item.innerHTML = `
                 <div class="selection-checkmark" onclick="toggleSelection(event, '${file.id}', this.closest('.gallery-item'))">✓</div>
                 <div class="thumbnail-link" onclick="openLightbox(event, '${file.id}'); event.stopPropagation();" draggable="false">
                     <div class="thumbnail-wrapper">
                         ${mediaHTML}
                         ${file.has_workflow ? `<a href="/galleryout/workflow/${file.id}" class="workflow-badge" onclick="event.stopPropagation()">⚙️ Workflow</a>` : ''}
-                        ${aiBadgeHTML}
                         ${file.duration ? `<span class="duration-overlay">⏱️ ${file.duration}</span>` : ''}
                     </div>
                 </div>
@@ -8297,13 +6780,7 @@
                 window.lastActiveY = e.clientY;
 
                 // Sync focus
-                if (focusedItemIndex !== galleryItems.indexOf(item)) {
-                    if (focusedItemIndex !== -1 && galleryItems[focusedItemIndex]) {
-                        galleryItems[focusedItemIndex].classList.remove('focused');
-                    }
-                    focusedItemIndex = galleryItems.indexOf(item);
-                    item.classList.add('focused');
-                }
+                scheduleFocusSync(item);
             });
             item.addEventListener('mouseleave', () => { hoveredItemIndex = -1; });
             
@@ -8312,7 +6789,7 @@
         function updateLoadMoreVisibility() { const loadMoreContainer = document.getElementById('load-more-container'); if (!loadMoreContainer) return; const shouldHide = currentItemCount >= totalFiles || totalFiles === 0; loadMoreContainer.style.display = shouldHide ? 'none' : 'block'; }
         function updateFileCountBadge() { const fileCountBadge = document.querySelector('.file-count-badge'); if (!fileCountBadge) return; const displayCount = galleryItems.length; totalFiles = displayCount; totalFolderFiles--; const showTotal = totalFiles !== totalFolderFiles; fileCountBadge.textContent = `📂 ${displayCount} File${displayCount !== 1 ? 's' : ''}${showTotal ? ` (${totalFolderFiles} Total)` : ''}`; }
         function showEmptyState() { 
-            const logoSrc = "{{ app_logo_b64 }}";
+            const logoSrc = "{{ .app_logo_b64 }}";
             let htmlContent = '';
             
             // Shared logo style (Full color + Blue Glow)
@@ -8326,7 +6803,7 @@
                         <img src="${logoSrc}" style="${logoStyle}" alt="SmartGallery">
                         <h3 style="margin:0 0 10px 0; font-size:1.5rem; font-weight:700;">No results found</h3>
                         <p style="color:var(--text-muted); margin:0; font-size:1.1rem;">No files match your current search criteria.</p>
-                        <a href="{{ url_for('gallery_view', folder_key=current_folder_key) }}" class="glass-btn" style="margin-top:25px; text-decoration:none; padding: 0.8rem 1.5rem;">
+                        <a href="/galleryout/view/{{ .current_folder_key }}" class="glass-btn" style="margin-top:25px; text-decoration:none; padding: 0.8rem 1.5rem;">
                             🗑️ Reset Filters
                         </a>
                     </div>
@@ -8507,7 +6984,7 @@
             event.stopPropagation();
                         
             // Sync keyboard focus with mouse selection
-            const newIndex = galleryItems.indexOf(item);
+            const newIndex = (typeof item._galleryIndex === 'number') ? item._galleryIndex : galleryItems.indexOf(item);
             if (newIndex !== -1) {
                 if (focusedItemIndex !== -1 && galleryItems[focusedItemIndex]) {
                     galleryItems[focusedItemIndex].classList.remove('focused');
@@ -8635,7 +7112,7 @@
             // Only show if exactly 2 items are selected
             if(compareBtn) {
                 compareBtn.style.display = (selCount === 2) ? 'flex' : 'none';
-                if (selCount === 2) compareBtn.style.color = 'var(--ai-color)';
+                if (selCount === 2) compareBtn.style.color = 'var(--primary-color)';
             }
             
             // --- COMPARE MENU ITEM LOGIC (Redundant for Mobile) ---
@@ -8757,6 +7234,7 @@
             // If triggered via keyboard hover, 'element' might be the button or the item itself. 
             // We need to ensure we find the container item safely.
             const item = element.closest('.gallery-item');
+            const deletedIndex = (typeof item._galleryIndex === 'number') ? item._galleryIndex : galleryItems.indexOf(item);
             
             // Disable button if passed (might be null or undefined in keyboard trigger)
             if (element && element.tagName === 'BUTTON') element.disabled = true;
@@ -8775,12 +7253,24 @@
                         setTimeout(() => {
                             item.remove();
                             galleryItems = galleryItems.filter(gi => gi !== item);
+                            reindexGalleryItems(0);
                             allFilesData = allFilesData.filter(f => f.id !== fileId);
                             selectedFiles.delete(fileId);
                             updateSelectionUI();
                             currentItemCount--;
                             updateFileCountBadge();
                             updateLoadMoreVisibility();
+                            
+                            if (galleryItems.length > 0) {
+                                const newFocusIndex = Math.max(0, Math.min(deletedIndex, galleryItems.length - 1));
+                                if (focusedItemIndex !== -1 && galleryItems[focusedItemIndex]) {
+                                    galleryItems[focusedItemIndex].classList.remove('focused');
+                                }
+                                focusedItemIndex = newFocusIndex;
+                                if (galleryItems[focusedItemIndex]) galleryItems[focusedItemIndex].classList.add('focused');
+                            } else {
+                                focusedItemIndex = -1;
+                            }
                         }, 200); // Faster removal
                     } else {
                         // Always show error notifications
@@ -9004,7 +7494,7 @@
                 }
             }, 60000); // Disappear after 60 secs if ignored
         }
-        const lightboxOverlay = document.getElementById('lightbox-overlay'); const lightboxMedia = document.getElementById('lightbox-media'); const lightboxTitle = document.getElementById('lightbox-title'); const lightboxDownload = document.getElementById('lightbox-download'); const lightboxWorkflow = document.getElementById('lightbox-workflow'); const lightboxNewTab = document.getElementById('lightbox-new-tab'); const lightboxAiCaption = document.getElementById('lightbox-ai-caption'); let currentLightboxIndex = -1; let currentLightboxFile = null; let currentZoom = 1; let currentTranslateX = 0; let currentTranslateY = 0; let panStep = 50;
+        const lightboxOverlay = document.getElementById('lightbox-overlay'); const lightboxMedia = document.getElementById('lightbox-media'); const lightboxTitle = document.getElementById('lightbox-title'); const lightboxDownload = document.getElementById('lightbox-download'); const lightboxWorkflow = document.getElementById('lightbox-workflow'); const lightboxNewTab = document.getElementById('lightbox-new-tab'); let currentLightboxIndex = -1; let currentLightboxFile = null; let currentZoom = 1; let currentTranslateX = 0; let currentTranslateY = 0; let panStep = 50;
         function updateLightboxTitle() { if (!currentLightboxFile) return; const zoomPercentage = Math.round(currentZoom * 100); lightboxTitle.textContent = `${currentLightboxFile.name} (Scale: ${zoomPercentage}%)`; }
         function updateMediaTransform() { const mediaEl = lightboxMedia.querySelector('img, video'); if (!mediaEl) return; mediaEl.style.transform = `translate(${currentTranslateX}px, ${currentTranslateY}px) scale(${currentZoom})`; updateLightboxTitle(); }
         
@@ -9040,8 +7530,6 @@
             
             const mediaElement = lightboxMedia.querySelector('video, audio');
             if (mediaElement) mediaElement.pause();
-            
-            toggleAiCaption(false);
 
             if (currentLightboxIndex !== -1 && galleryItems.length > 0) {
                 if (focusedItemIndex !== -1 && galleryItems[focusedItemIndex]) {
@@ -9165,8 +7653,6 @@
             
             // Clear the container
             lightboxMedia.innerHTML = '';
-            // Hide caption by default when changing images
-            toggleAiCaption(false);
             
             let mediaEl;
             const isImage = ['image', 'animated_image'].includes(file.type);
@@ -9263,19 +7749,15 @@
             lightboxDownload.href = `/galleryout/download/${file.id}`;
             lightboxNewTab.href = `/galleryout/file/${file.id}`;
             
-            updateLightboxButtonsUI(file.has_workflow, file.ai_caption, file.id);
-
-            // --- NEW: Perform a background check for fresh metadata ---
+            updateLightboxButtonsUI(file.has_workflow, file.id);
             verifyMetadataRealtime(file.id);
         }
 
         // Helper to update buttons state in Lightbox
-        function updateLightboxButtonsUI(hasWorkflow, aiCaption, fileId) {
+        function updateLightboxButtonsUI(hasWorkflow, fileId) {
             const summaryBtn = document.getElementById('lightbox-summary-btn');
             const workflowBtn = document.getElementById('lightbox-workflow');
             const copyBtn = document.getElementById('lightbox-copy-json');
-            const captionBtn = document.getElementById('lightbox-caption-icon');
-            const resetAiBtn = document.getElementById('lightbox-reset-ai-btn'); // Reference to the new Erase button
 
             // 1. Workflow Buttons Logic
             if (hasWorkflow) {
@@ -9297,25 +7779,6 @@
                 summaryBtn.onclick = null;
             }
             
-            // 2. AI Buttons Logic (Caption & Reset)
-            if (aiCaption) {
-                // Show Brain Icon
-                captionBtn.style.display = 'flex';
-                captionBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    toggleAiCaption(true, aiCaption);
-                };
-                
-                // Show Erase Button (only if file has AI data)
-                if(resetAiBtn) resetAiBtn.style.display = 'flex';
-            } else {
-                // Hide Brain Icon
-                captionBtn.style.display = 'none';
-                
-                // Hide Erase Button
-                if(resetAiBtn) resetAiBtn.style.display = 'none';
-            }
-            
             // --- STORYBOARD BUTTON LOGIC ---
             const filmstripBtn = document.getElementById('lightbox-filmstrip-btn');
             if (filmstripBtn && currentLightboxFile) {
@@ -9330,78 +7793,30 @@
             }
             
         }
-        
-        // New Function: Fetches real status from server and updates UI
+
         function verifyMetadataRealtime(fileId) {
             fetch(`/galleryout/check_metadata/${fileId}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        // 1. Update the cached data object
-                        const fileIndex = allFilesData.findIndex(f => f.id === fileId);
-                        if (fileIndex !== -1) {
-                            allFilesData[fileIndex].has_workflow = data.has_workflow;
-                            allFilesData[fileIndex].ai_caption = data.ai_caption;
-                            allFilesData[fileIndex].ai_last_scanned = data.ai_last_scanned;
-                            // NEW: Store real path if available
-                            allFilesData[fileIndex].real_path = data.real_path; 
-                        }
+                    // 1. Update the cached data object
+                    const fileIndex = allFilesData.findIndex(f => f.id === fileId);
+                    if (fileIndex !== -1) {
+                        allFilesData[fileIndex].has_workflow = data.has_workflow;
+                        // NEW: Store real path if available
+                        allFilesData[fileIndex].real_path = data.real_path;
+                    }
 
-                        // 2. If we are still looking at the same file, update the UI
-                        if (currentLightboxFile && currentLightboxFile.id === fileId) {
-                            currentLightboxFile.ai_last_scanned = data.ai_last_scanned; 
-                            currentLightboxFile.real_path = data.real_path; // Cache locally
-                            
-                            updateLightboxButtonsUI(data.has_workflow, data.ai_caption, fileId);
-                            
-                            // 3. REFRESH PATH CLICK HANDLER (To include the real path if just discovered)
-                            // We call a helper to re-bind the click event with fresh data
-                            updateLightboxPathTooltip(currentLightboxFile); 
-
-                            // Update open caption if needed
-                            const captionBox = document.getElementById('lightbox-ai-caption');
-                            if (captionBox.classList.contains('visible') && data.ai_caption) {
-                                toggleAiCaption(true, data.ai_caption);
-                            }
-                        }
+                    // 2. If we are still looking at the same file, update the UI
+                    if (currentLightboxFile && currentLightboxFile.id === fileId) {
+                        currentLightboxFile.has_workflow = data.has_workflow;
+                        currentLightboxFile.real_path = data.real_path;
+                        updateLightboxButtonsUI(data.has_workflow, fileId);
+                        updateLightboxPathTooltip(currentLightboxFile);
+                    }
                     }
                 })
                 .catch(err => console.error("Metadata check failed:", err));
-        }
-        
-        function toggleAiCaption(show, text='') {
-            const captionBox = document.getElementById('lightbox-ai-caption');
-            
-            if (show && text) {
-                const formattedText = formatAiCaptionText(text);
-                
-                // --- LOGIC DATE ---
-                let dateHtml = '';
-                // Se siamo nel lightbox, usiamo i dati freschi del file corrente
-                if (currentLightboxFile && currentLightboxFile.ai_last_scanned) {
-                    const ts = parseFloat(currentLightboxFile.ai_last_scanned);
-                    if (ts > 0) {
-                        const dateObj = new Date(ts * 1000);
-                        // Formato leggibile: DD/MM/YYYY HH:MM
-                        const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                        dateHtml = `<span style="color:#aaa; font-size:0.85rem; font-weight:normal; margin-left:10px;">(Indexed: ${dateStr})</span>`;
-                    }
-                }
-                // -------------------
-
-                captionBox.innerHTML = `
-                    <button class="caption-close-btn" title="Close" onclick="toggleAiCaption(false)">×</button>
-                    <div id="lightbox-ai-text-scroll">
-                        <strong style="color:var(--ai-color); display:block; margin-bottom:10px; font-size:1.1rem;">
-                            🧠 AI Caption: ${dateHtml}
-                        </strong>
-                        ${formattedText}
-                    </div>
-                `;
-                captionBox.classList.add('visible');
-            } else {
-                captionBox.classList.remove('visible');
-            }
         }
         
         function navigateLightbox(direction) { if (galleryItems.length === 0) return; currentLightboxIndex = (currentLightboxIndex + direction + galleryItems.length) % galleryItems.length; showItemAtIndex(currentLightboxIndex); }
@@ -9464,11 +7879,10 @@
         async function deleteFromLightbox(noConfirm = false) {
             if (currentLightboxIndex < 0 || currentLightboxIndex >= galleryItems.length) return;
 
-            // Safety: in AI/Global mode confirm always
-            if ((isAiSearch || isGlobalSearch) && noConfirm) noConfirm = false;
+            if (isGlobalSearch && noConfirm) noConfirm = false;
 
             let message = 'Are you sure you want to delete this file?\nThis cannot be undone.';
-            if (isAiSearch || isGlobalSearch) {
+            if (isGlobalSearch) {
                 message = 'Global Mode Warning:\nAre you sure you want to delete this file from its original folder?';
             }
 
@@ -9490,6 +7904,7 @@
                         showNotification(data.message || 'File deleted!', 'success');
                         itemToDelete.remove();
                         galleryItems.splice(currentLightboxIndex, 1);
+                        reindexGalleryItems(currentLightboxIndex);
                         allFilesData = allFilesData.filter(f => f.id !== fileId);
                         currentItemCount--;
                         updateFileCountBadge();
@@ -9999,213 +8414,13 @@
                     });
             }, 1000); // Check every 1 second
         }
-        
-        // --- AI SEARCH FUNCTIONS ---
-        function selectAiScope(scope) {
-            currentAiScope = scope;
-            document.querySelectorAll('.ai-scope-option').forEach(el => {
-                el.classList.toggle('active', el.dataset.scope === scope);
-            });
-            
-            // Show recursive toggle ONLY if scope is local
-            const recursiveToggle = document.getElementById('ai-recursive-toggle');
-            if (recursiveToggle) {
-                if (scope === 'local') {
-                    recursiveToggle.style.display = 'flex';
-                    
-                    const lastAiRecursive = localStorage.getItem('lastAiRecursive');
-                    const aiRecursiveCheckbox = document.getElementById('ai-search-recursive');
-                    
-                    if (lastAiRecursive !== null) {
-                        // Confronta con la stringa "true"
-                        aiRecursiveCheckbox.checked = (lastAiRecursive === "true");
-                        recursiveToggle.classList.toggle('active', aiRecursiveCheckbox.checked);
-                    } else {
-                        // Default: unchecked
-                        aiRecursiveCheckbox.checked = false;
-                        recursiveToggle.classList.remove('active');
-                    }
-                } else {
-                    recursiveToggle.style.display = 'none';
-                    const aiRecursiveCheckbox = document.getElementById('ai-search-recursive');
-                    if (aiRecursiveCheckbox) {
-                        aiRecursiveCheckbox.checked = false;
-                    }
-                }
-            }
-        }
-        
-        // --- MODAL AI ---
-        function closeAiInfoModal() {
-            document.getElementById('ai-info-overlay').classList.remove('visible');
-        }
-
-        function openAiSearchModal() {
-        if (!enableAiSearch) {
-            const infoOverlay = document.getElementById('ai-info-overlay');
-            infoOverlay.classList.add('visible');
-            
-            infoOverlay.addEventListener('click', (e) => {
-                if (e.target === infoOverlay) closeAiInfoModal();
-            }, { once: true });
-            
-            return;
-        }
-        
-        // AI Enabled 
-        const overlay = document.getElementById('ai-search-overlay');
-        const inputEl = document.getElementById('ai-search-input');
-        const clearBtn = document.getElementById('ai-search-clear-text');
-        const limitInput = document.getElementById('ai-search-limit');
-        
-        // 1. Restore QUERY
-        const lastQuery = localStorage.getItem('lastAiQuery');
-        if (lastQuery) {
-            inputEl.value = lastQuery;
-            clearBtn.style.display = 'flex';
-        } else {
-            inputEl.value = '';
-            clearBtn.style.display = 'none';
-        }
-
-        // 2. Restore LIMIT
-        const lastLimit = localStorage.getItem('lastAiLimit');
-        if (lastLimit && limitInput) {
-            limitInput.value = lastLimit;
-        } else if (limitInput) {
-            limitInput.value = 100;
-        }
-
-        // 3. Restore SCOPE
-        const lastScope = localStorage.getItem('lastAiScope');
-        if (lastScope && (lastScope === 'global' || lastScope === 'local')) {
-            selectAiScope(lastScope); // Questa funzione ora gestirà anche la checkbox
-        } else {
-            selectAiScope('global');
-        }        
-
-        overlay.classList.add('visible');
-        document.body.classList.add('modal-open');
-        inputEl.focus();
-        }
-        
-        function closeAiSearchModal() {
-            const overlay = document.getElementById('ai-search-overlay');
-            overlay.classList.remove('visible');
-            document.body.classList.remove('modal-open');
-        }
-        
-        function submitAiSearch() {
-            const inputEl = document.getElementById('ai-search-input');
-            const query = inputEl.value.trim();
-            const limit = document.getElementById('ai-search-limit').value || 100;
-            
-            if (!query) return;
-            
-            // --- save STATUS ---
-            localStorage.setItem('lastAiQuery', query);
-            localStorage.setItem('lastAiLimit', limit);
-            localStorage.setItem('lastAiScope', currentAiScope);
-            
-            const aiRecursiveCheckbox = document.getElementById('ai-search-recursive');
-            if (aiRecursiveCheckbox) {
-                localStorage.setItem('lastAiRecursive', aiRecursiveCheckbox.checked);
-            }
-            
-            closeAiSearchModal();
-            
-            // Show Loader
-            const loader = document.getElementById('loader-overlay');
-            loader.style.display = 'flex';
-            loader.style.opacity = '1';
-            
-            let finalQuery = query;
-            const isRecursive = document.getElementById('ai-search-recursive')?.checked;
-
-            if (currentAiScope === 'local') {
-                // We append a special flag if recursive is enabled
-                const pathSuffix = isRecursive ? " [RECURSIVE]" : "";
-                finalQuery += " ||| " + currentFolderInfo.path + pathSuffix;
-            }
-            
-            const searchPayload = { 
-                query: finalQuery, 
-                limit: parseInt(limit),
-                scope: currentAiScope
-            };
-
-            fetch('/galleryout/ai_queue', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(searchPayload)
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'queued') {
-                    pollAiStatus(data.session_id);
-                } else {
-                    showNotification("Error starting AI search: " + data.message, 'error');
-                    loader.style.display = 'none';
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                showNotification("Network error starting AI search", 'error');
-                loader.style.display = 'none';
-            });
-        }
-        
-        function pollAiStatus(sessionId) {
-            let attempts = 0;
-            const maxAttempts = 15; 
-            
-            const interval = setInterval(() => {
-                attempts++;
-                
-                fetch(`/galleryout/ai_check/${sessionId}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.status === 'completed') {
-                            clearInterval(interval);
-                            window.location.href = `{{ url_for('gallery_view', folder_key=current_folder_key) }}?ai_session_id=${sessionId}`;
-                        } else if (data.status === 'error') {
-                            clearInterval(interval);
-                            showNotification("AI Search failed (Worker Error).", 'error');
-                            document.getElementById('loader-overlay').style.display = 'none';
-                        } else {
-                            // Status is 'pending' or 'processing'
-                            // Timeout reached
-                            if (attempts >= maxAttempts) {
-                                clearInterval(interval);
-                                document.getElementById('loader-overlay').style.display = 'none';
-                                
-                                const repoUrl = "https://github.com/biagiomaf/smart-comfyui-gallery";
-                                
-                                // Construct HTML message for Smart Dialog
-                                const msg = "The search request was sent, but the AI service did not respond in time.\n\n" +
-                                            "Please ensure that the <strong>'smartgallery_ai_service'</strong> script is running in your backend terminal.\n\n" +
-                                            "If you haven't installed the AI dependencies yet, please consult the installation guide here:\n" +
-                                            `<a href="${repoUrl}" target="_blank" style="color:var(--ai-color); font-weight:bold; word-break:break-all;">${repoUrl}</a>`;
-                                
-                                smartConfirm("⚠️ AI Service Timeout", msg, false);
-                            }
-                        }
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        // do not stop for temporarly network errors
-                    });
-            }, 1000);
-        }
-        
-        
         // --- SCOPE SELECTOR & RECURSIVE LOGIC (Custom Native Dropdowns) ---
         const scopeRadios = document.querySelectorAll('input[name="scope"]');
         const recursiveCheckbox = document.querySelector('input[name="recursive"]');
         const recursiveWrapper = document.getElementById('recursive-standard-ui');
 
-        let selectedExts = new Set({{ selected_extensions | tojson }});
-        let selectedPfxs = new Set({{ selected_prefixes | tojson }});
+        let selectedExts = new Set({{ .selected_extensions | tojson }});
+        let selectedPfxs = new Set({{ .selected_prefixes | tojson }});
 
         // 1. Core Dropdown Logic
         function toggleCustomDropdown(event, menuId) {
@@ -10332,7 +8547,7 @@
         function triggerOptionsRefresh() {
             const scope = document.querySelector('input[name="scope"]:checked')?.value || 'local';
             const isRec = recursiveCheckbox?.checked || false;
-            const folderKey = '{{ current_folder_key }}';
+            const folderKey = '{{ .current_folder_key }}';
             
             const wrapExt = document.getElementById('wrapper-extensions');
             const wrapPfx = document.getElementById('wrapper-prefixes');
@@ -10384,12 +8599,12 @@
         }
 
         // 6. Initial Population
-        const initialExts = {{ available_extensions | tojson }};
+        const initialExts = {{ .available_extensions | tojson }};
         renderCustomOptions('dropdown-extensions', 'count-extensions', initialExts, 'extension', selectedExts);
         
-        const pfxLimit = {{ prefix_limit_reached | tojson }};
+        const pfxLimit = {{ .prefix_limit_reached | tojson }};
         if (!pfxLimit) {
-            const initialPfxs = {{ available_prefixes | tojson }};
+            const initialPfxs = {{ .available_prefixes | tojson }};
             renderCustomOptions('dropdown-prefixes', 'count-prefixes', initialPfxs, 'prefix', selectedPfxs);
         }
 
@@ -10582,6 +8797,7 @@
         
             // Initialize Focus Mode state
             initFocusMode();
+            initTopbar();
             
             // --- GLOBAL MOUSE TRACKER (INSIDE DOMContentLoaded) ---
             window.lastMouseX = 0;
@@ -10624,7 +8840,6 @@
             setupSidebarExpansion();
             setupSidebarMinify();
             appendFiles(initialFiles);
-            startGlobalWorkerMonitor();
             
             // --- DATE VALIDATION LOGIC ---
             const filterForm = document.getElementById('filter-form');
@@ -10665,43 +8880,8 @@
             
             // Initialize Auto-Refresh Logic
             initAutoRefresh();
-            
-            initAiSettingsPersistence();
-            
-            // --- SAVE STATUS CHECKBOX AI RECURSIVE ---
-            const aiRecursiveCheckbox = document.getElementById('ai-search-recursive');
-            if (aiRecursiveCheckbox) {
-                aiRecursiveCheckbox.addEventListener('change', function() {
-                    // Salva come stringa "true" o "false" (booleano convertito in stringa)
-                    localStorage.setItem('lastAiRecursive', this.checked.toString());
-                    console.log('AI Recursive saved:', this.checked, 'as', this.checked.toString());
-                    
-                    // Aggiorna anche l'aspetto visivo
-                    const wrapper = this.closest('.recursive-wrapper');
-                    if (wrapper) {
-                        wrapper.classList.toggle('active', this.checked);
-                    }
-                });
-            }
-            
-            // Aggiungi nella sezione DOMContentLoaded o dopo aver creato gli elementi:
-            const aiRecursiveWrapper = document.getElementById('ai-recursive-toggle');
-            if (aiRecursiveWrapper) {
-                aiRecursiveWrapper.addEventListener('click', function(e) {
-                    // Se clicchi sul wrapper ma non sulla checkbox stessa
-                    if (e.target !== document.getElementById('ai-search-recursive')) {
-                        const checkbox = document.getElementById('ai-search-recursive');
-                        checkbox.checked = !checkbox.checked;
-                        checkbox.dispatchEvent(new Event('change'));
-                    }
-                });
-            }
-            
-            // Only run regular sync if not in AI mode
-            if(!isAiSearch) {
-                // startSyncProcess(false); // OLD
-                startSyncProcess(false, false); // NEW Signature
-            }
+
+            startSyncProcess(false, false);
             // Lightbox Help Button listener
             const helpBtn = document.getElementById('lightbox-help-btn');
             if (helpBtn) {
@@ -10715,33 +8895,6 @@
             document.getElementById('lightbox-help-overlay').addEventListener('click', (e) => {
                 if (e.target.id === 'lightbox-help-overlay') closeLightboxHelp();
             });
-            // --- JS: AI BANNER TEXT FORMATTING ---
-            const aiBannerText = document.getElementById('ai-banner-text');
-            if (aiBannerText) {
-                const rawQuery = aiBannerText.dataset.rawQuery || "";
-                const separator = " ||| ";
-                
-                let labelHtml = "";
-                let queryText = "";
-
-                if (rawQuery.includes(separator)) {
-                    // Local
-                    const parts = rawQuery.split(separator);
-                    queryText = parts[0];
-                    labelHtml = `<span>🧠</span> Current Folder`;
-                } else {
-                    //  Global
-                    queryText = rawQuery;
-                    labelHtml = `<span>🧠</span> All Folders`;
-                }
-
-                // Inseriamo DUE span separati per permettere al CSS Mobile di spostarli
-                aiBannerText.innerHTML = `
-                    <span class="ai-scope-part">${labelHtml}</span>
-                    <span class="ai-query-part">"${escapeHTML(queryText)}"</span>
-                `;
-            }
-            
             const sidebar = document.querySelector('.sidebar');
             const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
             const sidebarToggleText = document.getElementById('sidebar-toggle-text');
@@ -10773,7 +8926,7 @@
                     
                     // Update button text maintaining the X icon structure
                     const isVisible = searchPanel.classList.contains('visible');
-                    const activeCount = {{ active_filters_count }};
+                    const activeCount = {{ .active_filters_count }};
                     
                     let baseText = isVisible ? '✕  Hide Filters' : '⚙️ Filters';
                     if (!isVisible && activeCount > 0) baseText += ` (${activeCount})`;
@@ -10906,23 +9059,6 @@
                 }
             });
             
-            // AI Listeners
-            // Bottone Desktop
-            const aiToggleDesktop = document.getElementById('ai-search-toggle-desktop');
-            if (aiToggleDesktop) {
-                aiToggleDesktop.addEventListener('click', openAiSearchModal);
-            }
-            
-            // Bottone Mobile
-            const aiToggleMobile = document.getElementById('ai-search-toggle-mobile');
-            if (aiToggleMobile) {
-                aiToggleMobile.addEventListener('click', openAiSearchModal);
-            }
-            
-            document.getElementById('ai-modal-close').addEventListener('click', closeAiSearchModal);
-            
-            document.getElementById('ai-search-submit').addEventListener('click', submitAiSearch);
-            
             const refreshBtn = document.getElementById('refresh-btn');
             if(refreshBtn) refreshBtn.addEventListener('click', (e) => { e.preventDefault(); startSyncProcess(true); });
             
@@ -11027,13 +9163,6 @@
                 }
             });
 
-            // --- FIX SCROLL CAPTION ---
-            const captionBoxElement = document.getElementById('lightbox-ai-caption');
-            if (captionBoxElement) {
-                captionBoxElement.addEventListener('wheel', (event) => {
-                    event.stopPropagation();
-                }, { passive: true });
-            }
             document.getElementById('close-summary-btn').addEventListener('click', closeNodeSummary);
             summaryOverlay.addEventListener('click', (event) => { if (event.target === summaryOverlay) closeNodeSummary(); });
             if(showUpload) showUploadModalBtn.addEventListener('click', showUploadModal);
@@ -11118,7 +9247,6 @@
                     if (document.getElementById('shortcuts-help-overlay').classList.contains('visible')) { closeShortcutsHelp(); return; }
                     if (document.getElementById('upload-overlay').classList.contains('visible')) { closeUploadModal(); return; }
                     if (document.getElementById('node-summary-overlay').classList.contains('visible')) { closeNodeSummary(); return; }
-                    if (document.getElementById('ai-search-overlay').classList.contains('visible')) { closeAiSearchModal(); return; }
                     
                     // B. Lightbox (Moved here to ensure it catches the event)
                     if (document.body.classList.contains('lightbox-open')) { 
@@ -11446,25 +9574,6 @@
                 closeShortcutsBtn.addEventListener('click', closeShortcutsHelp);
             }
 
-            // --- CLEAR BUTTON ---
-            const aiInput = document.getElementById('ai-search-input');
-            const aiClearBtn = document.getElementById('ai-search-clear-text');
-            
-            if (aiInput && aiClearBtn) {
-                // Mostra/Nascondi X mentre scrivi
-                aiInput.addEventListener('input', () => {
-                    aiClearBtn.style.display = aiInput.value.trim().length > 0 ? 'flex' : 'none';
-                });
-                
-                // Click on X
-                aiClearBtn.addEventListener('click', () => {
-                    aiInput.value = ''; // Pulisce
-                    aiClearBtn.style.display = 'none'; 
-                    localStorage.removeItem('lastAiQuery'); 
-                    aiInput.focus(); // Rimette il focus
-                });
-            }
-
             // --- BACK TO TOP ---
             const backToTopBtn = document.getElementById('backToTopBtn');
             window.addEventListener('scroll', () => {
@@ -11482,7 +9591,7 @@
                     e.preventDefault();
                     
                     // Redirect to clear filters
-                    window.location.href = "{{ url_for('gallery_view', folder_key=current_folder_key) }}";
+                    window.location.href = "/galleryout/view/{{ .current_folder_key }}";
                 }
             });
             
@@ -11778,37 +9887,6 @@
             }
         }
         
-        // --- BUTTONS + - LIMIT MAX RESULTS ---
-        window.adjustAiLimit = function(delta) {
-            const input = document.getElementById('ai-search-limit');
-            if (input) {
-                let val = parseInt(input.value) || 100;
-                val += delta;
-                
-                // Limiti di sicurezza (Minimo 10, Massimo 2000)
-                if (val < 10) val = 10;
-                if (val > 2000) val = 2000;
-                
-                input.value = val;
-            }
-        };
-        // --- FORMATTING CAPTION TEXT ---
-        function formatAiCaptionText(text) {
-            if (!text) return "";
-            const frameRegex = /\[(Start|Middle|End):\s*([\s\S]*?)\]/gi;
-            if (text.match(frameRegex)) {
-                return text.replace(frameRegex, (match, label, content) => {
-                    return `
-                        <div class="ai-caption-card">
-                            <div class="ai-card-header">${label.toUpperCase()} FRAME</div>
-                            <div class="ai-card-body">${content.trim()}</div>
-                        </div>
-                    `;
-                });
-            }
-            
-            return text;
-        }
         // --- COPY WORKFLOW HELPER FUNCTION ---
         function copyWorkflowToClipboard(fileId) {
             const file = allFilesData.find(f => f.id === fileId);
@@ -11864,745 +9942,6 @@
                 .catch(err => {
                     showNotification('Error fetching workflow: ' + err.message, 'error');
                 });
-        }
-        
-        // --- AI MANAGER FUNCTIONS (RENAMED TO FIX CONFLICT) ---
-        let aiManagerPollInterval = null;
-
-        function toggleAiManager(show) {
-            const overlay = document.getElementById('ai-manager-overlay');
-            if (show) {
-                overlay.classList.add('visible');
-                document.body.classList.add('modal-open');
-                switchAiTab('queue');
-                startAiManagerPolling(); // Rinomina qui
-            } else {
-                overlay.classList.remove('visible');
-                document.body.classList.remove('modal-open');
-                stopAiManagerPolling(); // Rinomina qui
-            }
-        }
-
-        function switchAiTab(tabName) {
-            document.querySelectorAll('.ai-tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.ai-tab-content').forEach(c => c.classList.remove('active'));
-            
-            const btns = document.querySelectorAll('.ai-tab-btn');
-            if (tabName === 'queue') btns[0].classList.add('active');
-            if (tabName === 'watched') btns[1].classList.add('active');
-            if (tabName === 'settings') btns[2].classList.add('active');
-
-            document.getElementById('ai-tab-' + tabName).classList.add('active');
-            if (tabName === 'watched') loadWatchedFolders();
-        }
-
-        function startAiManagerPolling() {
-            if (aiManagerPollInterval) clearInterval(aiManagerPollInterval);
-            pollAiManagerStatus();
-            aiManagerPollInterval = setInterval(pollAiManagerStatus, 2000);
-        }
-        
-        function stopAiManagerPolling() {
-            if (aiManagerPollInterval) clearInterval(aiManagerPollInterval);
-        }
-        
-        async function pollAiManagerStatus() {
-            try {
-                const res = await fetch('/galleryout/ai_indexing/status');
-                const data = await res.json();
-                
-                // --- 1. Status Text, Color & Animation Logic ---
-                const statusEl = document.getElementById('ai-stat-status');
-                const dotsEl = document.getElementById('ai-status-anim'); // Get the dots container
-                const isPaused = (data.global_status === 'Paused');
-                
-                if(statusEl) {
-                    statusEl.textContent = data.global_status;
-                    statusEl.className = "ai-stat-val"; // Reset base class
-                    
-                    // Apply colors and toggle animation based on state
-                    if (isPaused) {
-                        statusEl.classList.add("status-paused"); // Yellow (defined in CSS)
-                        if(dotsEl) dotsEl.style.display = 'none'; // Hide dots
-                    } else if (data.global_status === 'Indexing') {
-                        statusEl.style.color = 'var(--success-color)'; // Green
-                        if(dotsEl) dotsEl.style.display = 'inline-flex'; // Show dots
-                    } else {
-                        statusEl.style.color = 'white'; // Default
-                        if(dotsEl) dotsEl.style.display = 'none'; // Hide dots
-                    }
-                }
-                
-                // --- 2. Toggle Button Update (Pause/Resume) ---
-                const toggleBtn = document.getElementById('ai-toggle-pause');
-                if (toggleBtn) {
-                    if (isPaused) {
-                        toggleBtn.innerHTML = "▶ Resume";
-                        toggleBtn.className = "state-paused"; // Green background
-                        toggleBtn.dataset.nextAction = "resume";
-                    } else {
-                        toggleBtn.innerHTML = "⏸ Pause";
-                        toggleBtn.className = "state-running"; // Standard background
-                        toggleBtn.dataset.nextAction = "pause";
-                    }
-                }
-                
-                // --- 3. Standard Stats ---
-                const pendingEl = document.getElementById('ai-stat-pending');
-                if(pendingEl) pendingEl.textContent = data.pending_count;
-                
-                const timeEl = document.getElementById('ai-stat-time');
-                if(timeEl) timeEl.textContent = data.avg_time.toFixed(1) + 's';
-
-                // GPU Warning (FIXED: Added removal of class)
-                const warn = document.getElementById('ai-gpu-warning');
-                if (warn) {
-                    if (data.global_status === 'waiting_gpu') {
-                        warn.classList.add('visible');
-                    } else {
-                        warn.classList.remove('visible');
-                    }
-                }
-
-                // --- 4. Progress Bar & Current File ---
-                const total = data.current_job_total || 1;
-                const current = data.current_job_progress || 0;
-                let pct = 0;
-                let text = "Idle";
-                
-                if (data.current_file) {
-                    pct = Math.round((current / total) * 100);
-                    text = `Processing: .../${data.current_file}`; 
-                } else if (data.pending_count > 0) {
-                     text = "Waiting for worker...";
-                }
-                
-                const progressBar = document.getElementById('ai-progress-bar');
-                if(progressBar) progressBar.style.width = pct + '%';
-                
-                const progressPct = document.getElementById('ai-progress-percent');
-                if(progressPct) progressPct.textContent = pct + '%';
-                
-                const currentFileEl = document.getElementById('ai-current-file');
-                if(currentFileEl) currentFileEl.textContent = text;
-                
-                // --- 5. Queue List Preview (With Priority Support) ---
-                const queueList = document.getElementById('ai-queue-preview');
-                if (queueList) {
-                    if(data.next_files && data.next_files.length > 0) {
-                        queueList.innerHTML = data.next_files.map(item => {
-                            // Backend returns object {path: "...", is_priority: true/false}
-                            const fPath = item.path;
-                            const isPrio = item.is_priority;
-                            // Robust split for both / and \
-                            const shortName = fPath.split(/[/\\]/).slice(-2).join('/');
-                            
-                            return `
-                            <div class="ai-queue-item ${isPrio ? 'priority' : ''}">
-                                <span title="${fPath}">
-                                    ${isPrio ? '⚡ ' : ''}.../${shortName}
-                                </span>
-                                <span>${isPrio ? 'High Priority' : 'Pending'}</span>
-                            </div>
-                        `}).join('');
-                    } else if (data.pending_count === 0) {
-                        queueList.innerHTML = '<div style="padding:10px; text-align:center; color:#555;">Queue empty</div>';
-                    }
-                }
-
-            } catch (e) { console.error("Manager Poll Error", e); }
-        }
-        
-        // --- AI SETTINGS PERSISTENCE ---
-        function initAiSettingsPersistence() {
-            const STORAGE_KEY = 'galleryAiSettings';
-            
-            // 1. Restore saved settings on load
-            const savedRaw = localStorage.getItem(STORAGE_KEY);
-            if (savedRaw) {
-                try {
-                    const s = JSON.parse(savedRaw);
-                    
-                    // Restore Precision
-                    if (s.precision) {
-                        const el = document.querySelector(`input[name="ai_precision"][value="${s.precision}"]`);
-                        if (el) el.checked = true;
-                    }
-                    
-                    // Restore Beams
-                    if (s.beams) {
-                        const el = document.querySelector(`input[name="ai_beams"][value="${s.beams}"]`);
-                        if (el) el.checked = true;
-                    }
-                } catch (e) {
-                    console.error("Error loading AI settings:", e);
-                }
-            }
-
-            // 2. Attach listeners to save on every change
-            const inputs = document.querySelectorAll('input[name="ai_precision"], input[name="ai_beams"]');
-            inputs.forEach(input => {
-                input.addEventListener('change', () => {
-                    // We reuse the existing helper to get the clean object
-                    const currentSettings = getAiParams(); 
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentSettings));
-                });
-            });
-        }
-        
-        async function controlAiQueue(action) {
-            try {
-                const res = await fetch('/galleryout/ai_indexing/control', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ action: action })
-                });
-                const d = await res.json();
-                pollAiManagerStatus(); // Chiama la nuova funzione rinominata
-                showNotification(d.message, d.status === 'success' ? 'success' : 'error');
-            } catch (e) { console.error(e); }
-        }
-        
-        function getAiParams() {
-            // Updated to read from Radio Buttons instead of Select
-            const beamsEl = document.querySelector('input[name="ai_beams"]:checked');
-            const precEl = document.querySelector('input[name="ai_precision"]:checked');
-            
-            // Fallback defaults if nothing selected (should not happen)
-            const beamsVal = beamsEl ? parseInt(beamsEl.value) : 3;
-            const precVal = precEl ? precEl.value : 'fp16';
-
-            return {
-                beams: beamsVal,
-                precision: precVal
-            };
-        }
-        
-        // --- AI MODAL & WATCHED FOLDERS LOGIC ---
-        let pendingFolderKey = null;
-
-        // 1. Open Options Modal (triggered by Brain icon in Sidebar)
-        function indexFolder(folderKey) {
-            pendingFolderKey = folderKey;
-            
-            const folder = foldersData[folderKey];
-            const name = folder ? folder.display_name : folderKey;
-            
-            const pathPreview = document.getElementById('ai-opt-path');
-            if(pathPreview) pathPreview.textContent = `Target: ${name}`;
-            
-            // --- UI TOGGLE LOGIC ---
-            const stdControls = document.getElementById('ai-opt-standard-controls');
-            const watchedControls = document.getElementById('ai-opt-watched-controls');
-            const startBtn = document.getElementById('ai-opt-start-btn');
-            
-            const implicitMsg = document.getElementById('ai-opt-implicit-msg');
-            const watchContainer = document.getElementById('ai-opt-watch-container');
-            const recCheckbox = document.getElementById('ai-opt-recursive');
-            const watchCheckbox = document.getElementById('ai-opt-watch');
-            const forceCheckbox = document.getElementById('ai-opt-force');
-
-            // Reset values
-            if(recCheckbox) recCheckbox.checked = false;
-            if(watchCheckbox) watchCheckbox.checked = true;
-            if(forceCheckbox) forceCheckbox.checked = false;
-
-            if (folder && folder.is_explicitly_watched) {
-                // CASE 1: EXPLICITLY WATCHED (Root)
-                // Show "Stop Watching" UI
-                stdControls.style.display = 'none';
-                watchedControls.style.display = 'block';
-                startBtn.style.display = 'none'; 
-            
-            } else if (folder && folder.is_watched && !folder.is_explicitly_watched) {
-                // CASE 2: IMPLICITLY WATCHED (Child of a watched folder)
-                // Show Standard UI but HIDE Watch Option and SHOW Info Message
-                stdControls.style.display = 'block';
-                watchedControls.style.display = 'none';
-                startBtn.style.display = 'block';
-                
-                // Customize for implicit
-                implicitMsg.style.display = 'block'; // Show "Covered by Parent"
-                watchContainer.style.display = 'none'; // Hide "Add to Watch List"
-                watchCheckbox.checked = false; // Ensure it's not sent as true
-                
-            } else {
-                // CASE 3: NOT WATCHED
-                // Standard UI
-                stdControls.style.display = 'block';
-                watchedControls.style.display = 'none';
-                startBtn.style.display = 'block';
-                
-                // Reset standard view
-                implicitMsg.style.display = 'none';
-                watchContainer.style.display = 'block';
-                watchCheckbox.checked = true;
-            }
-            
-            document.getElementById('ai-options-modal').classList.add('visible');
-        }
-        
-        // New function to handle removal directly from the modal
-        async function stopWatchingFromModal() {
-            if (!pendingFolderKey) return;
-
-            const folder = foldersData[pendingFolderKey];
-            if (!folder) return;
-
-            // 1. Confirm Stop
-            const stopConfirmed = await smartConfirm(
-                "⚠️ Stop Monitoring?", 
-                `Stop monitoring "${folder.display_name}"?\n\nIf this folder was added with "Include Subfolders", all its subfolders will also be removed from the watch list.`, 
-                true
-            );
-            
-            if (!stopConfirmed) return;
-
-            // 2. Ask Wipe Data
-            const wipeConfirmed = await smartConfirm(
-                "🗑️ Reset Data?", 
-                "Do you also want to RESET existing AI data for this folder?\n\nDelete = Wipe Data (Captions/Embeddings)\nCancel = Keep Data (Stop monitoring only)", 
-                true // Using red button for Wipe
-            );
-
-            closeAiOptions();
-            showNotification("Removing from Watch List...", "info");
-
-            const safePath = encodeURIComponent(folder.path);
-
-            fetch('/galleryout/ai_indexing/watched', {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    folder_path: folder.path,
-                    reset_data: wipeConfirmed
-                })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    showNotification("Folder removed from Watch List.", "success");
-                    setTimeout(() => window.location.reload(), 1000);
-                } else {
-                    showNotification(data.message || "Error removing folder", "error");
-                }
-            })
-            .catch(handleError);
-        }
-        
-        function closeAiOptions() {
-            document.getElementById('ai-options-modal').classList.remove('visible');
-            pendingFolderKey = null;
-        }
-        function toggleAiPause() {
-            const btn = document.getElementById('ai-toggle-pause');
-            const action = btn.dataset.nextAction || 'pause';
-            controlAiQueue(action);
-        }
-        // --- NEW: RESET / ERASE LOGIC ---
-        async function confirmAiReset() {
-            const confirmed = await smartConfirm(
-                "🗑️ Erase AI Data", 
-                "Are you sure you want to ERASE the AI data (captions/embeddings) for this target?\n\nThe files themselves will NOT be deleted, only the AI metadata.", 
-                true
-            );
-            
-            if (!confirmed) return;
-
-            const recursive = document.getElementById('ai-opt-recursive').checked;
-            const payload = {};
-
-            if (pendingFolderKey) {
-                payload.folder_key = pendingFolderKey;
-                payload.recursive = recursive;
-            } else if (selectedFiles.size > 0) {
-                payload.file_ids = [...selectedFiles];
-            } else {
-                return;
-            }
-
-            const btn = document.querySelector('.nav-btn-danger-outline');
-            let originalText = "🗑️ Erase AI Data";
-            if (btn) {
-                originalText = btn.textContent;
-                btn.textContent = "Erasing...";
-                btn.disabled = true;
-            }
-
-            fetch('/galleryout/ai_indexing/reset', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(r => r.json())
-            .then(d => {
-                if (d.status === 'success') {
-                    showNotification(d.message, 'success', 6000);
-                    closeAiOptions();
-                    if (!pendingFolderKey) deselectAll();
-                } else {
-                    showNotification(d.message, 'error');
-                }
-            })
-            .catch(handleError)
-            .finally(() => {
-                if (btn) {
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                }
-            });
-        }
-        
-        
-        // 2. Execute Action after user confirmation in Modal
-        // --- UPDATED: CONFIRM INDEXING ---
-        function confirmAiIndex() {
-            // Get common params
-            let techParams = { beams: 3, precision: 'fp16' };
-            try { techParams = getAiParams(); } catch(e){}
-            
-            const force = document.getElementById('ai-opt-force').checked;
-
-            // MODE A: FOLDER
-            if (pendingFolderKey) {
-                const recursive = document.getElementById('ai-opt-recursive').checked;
-                const watch = document.getElementById('ai-opt-watch').checked;
-                
-                fetch('/galleryout/ai_indexing/add_folder', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ 
-                        folder_key: pendingFolderKey, 
-                        recursive: recursive,
-                        watch: watch,
-                        force: force,
-                        beams: techParams.beams,
-                        precision: techParams.precision
-                    })
-                })
-                .then(r => r.json())
-                .then(d => {
-                    const status = d.status === 'success' ? 'success' : 'warning';
-                    showNotification(d.message, status);
-                    
-                    // --- INSTANT UI UPDATE (FIX) ---
-                    // Aggiorniamo subito il modello locale JS per cambiare colore senza reload
-                    if (d.status === 'success' && watch) {
-                        if (foldersData[pendingFolderKey]) {
-                            // Impostiamo i flag che la funzione buildFolderTreeHTML controlla
-                            foldersData[pendingFolderKey].is_watched = true;
-                            foldersData[pendingFolderKey].is_explicitly_watched = true; 
-                            
-                            // Ridisegniamo immediatamente l'albero nella sidebar
-                            renderAllTrees(); 
-                        }
-                    }
-                    
-                    closeAiOptions();
-                    
-                    // Apriamo il manager per mostrare il progresso (comportamento standard)
-                    toggleAiManager(true);
-                    
-                    if(watch) loadWatchedFolders();
-                })
-                .catch(handleError);
-            } 
-            // MODE B: BATCH FILES
-            else if (selectedFiles.size > 0) {
-                fetch('/galleryout/ai_indexing/add_files', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ 
-                        file_ids: [...selectedFiles],
-                        force: force, 
-                        beams: techParams.beams,
-                        precision: techParams.precision
-                    })
-                })
-                .then(r => r.json())
-                .then(d => {
-                    const type = d.status === 'success' ? 'success' : 'warning';
-                    showNotification(d.message, type);
-                    
-                    closeAiOptions();
-                    if (d.count > 0) toggleAiManager(true);
-                    deselectAll();
-                })
-                .catch(err => {
-                    console.error(err);
-                    showNotification("Error queuing files", "error");
-                });
-            }
-        }
-        
-        // Update the Watched list passing the encoded PATH
-        async function loadWatchedFolders() {
-            const list = document.getElementById('watched-folders-list');
-            if(!list) return;
-            
-            list.innerHTML = '<div style="padding:20px; text-align:center;">Loading...</div>';
-            try {
-                const res = await fetch('/galleryout/ai_indexing/watched');
-                const data = await res.json();
-                
-                if (!data.folders || data.folders.length === 0) {
-                    list.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-muted)">No folders monitored.</div>';
-                    return;
-                }
-                
-                // SPACING FIX: HTML compacted into a single line to prevent pre-wrap from reading code indentation
-                list.innerHTML = data.folders.map(f => {
-                    const safePath = encodeURIComponent(f.path);
-                    const displayName = f.rel_path || f.display_name;
-                    return `<div class="watched-folder-item"><div style="display:flex; flex-direction:column; overflow:hidden; align-items:flex-start;"><span class="watched-folder-path" title="${f.path}" style="font-size:0.85rem; color:var(--primary-color);">${displayName}</span><span style="font-size:0.75rem; color:#666;">${f.recursive ? '↳ Recursive' : '⏹ Flat'}</span></div><button onclick="removeWatchedFolder('${safePath}')" class="delete-btn" style="padding:4px 8px; font-size:0.8rem; flex-shrink:0;">Stop</button></div>`;
-                }).join('');
-                
-            } catch (e) { list.innerHTML = 'Error loading folders.'; }
-        }
-
-        // Accepts encoded path, then decodes it and sends it to the server
-        async function removeWatchedFolder(encodedPath) {
-            const fullPath = decodeURIComponent(encodedPath);
-
-            // 1. Confirm Stop
-            const stopConfirmed = await smartConfirm(
-                "🚫 Stop Monitoring?", 
-                `Stop monitoring this folder?\n\n${fullPath}`, 
-                true
-            );
-            
-            if (!stopConfirmed) return;
-
-            // 2. Ask Wipe
-            const wipeConfirmed = await smartConfirm(
-                "🗑️ Reset Data?", 
-                "Do you also want to RESET existing AI data for this folder?\n\nDelete = Wipe Data\nCancel = Keep Data", 
-                true
-            );
-
-            try {
-                const btn = document.activeElement;
-                if (btn) btn.textContent = "...";
-
-                const res = await fetch('/galleryout/ai_indexing/watched', {
-                    method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        folder_path: fullPath,
-                        reset_data: wipeConfirmed
-                    })
-                });
-
-                const data = await res.json();
-
-                if (data.status === 'success') {
-                    showNotification("Folder removed.", "success");
-                    await loadWatchedFolders();
-
-                    // Update UI Instantly if possible
-                    let treeNeedsUpdate = false;
-                    for (const key in foldersData) {
-                        const fdPath = foldersData[key].path.replace(/\\/g, '/').toLowerCase();
-                        const remPath = fullPath.replace(/\\/g, '/').toLowerCase();
-
-                        if (fdPath === remPath || fdPath.startsWith(remPath + '/')) {
-                            foldersData[key].is_watched = false;
-                            foldersData[key].is_explicitly_watched = false;
-                            treeNeedsUpdate = true;
-                        }
-                    }
-
-                    if (treeNeedsUpdate) {
-                        renderAllTrees();
-                    }
-                } else {
-                    showNotification(data.message || "Error removing folder", "error");
-                    await loadWatchedFolders();
-                }
-
-            } catch (e) {
-                handleError(e);
-                loadWatchedFolders();
-            }
-        }
-        
-        // --- UPDATED: BATCH SELECTION HANDLER ---
-        function indexSelectedFiles() {
-            if (selectedFiles.size === 0) {
-                showNotification("No files selected", "warning");
-                return;
-            }
-            
-            // Open the standard AI Options Modal but in "File Mode"
-            // We set a special flag/state to know we are processing selected IDs
-            pendingFolderKey = null; // Ensure folder mode is off
-            
-            const pathPreview = document.getElementById('ai-opt-path');
-            if(pathPreview) pathPreview.textContent = `Target: ${selectedFiles.size} Selected Files`;
-            
-            // Hide Folder-specific options
-            document.getElementById('ai-opt-recursive').parentElement.style.display = 'none';
-            document.getElementById('ai-opt-watch').parentElement.style.display = 'none';
-            // Show only relevant description
-            document.querySelector('.ai-opt-desc').textContent = "Apply to selected files only.";
-            
-            document.getElementById('ai-options-modal').classList.add('visible');
-        }
-        
-        function indexCurrentLightboxFile() {
-            
-            if (!currentLightboxFile || !currentLightboxFile.id) return;
-
-            // 1. BLOCCO DEI DATI INIZIALI
-            // Ci serve per capire se l'utente è ancora su questa immagine tra 10 secondi
-            const targetFileId = currentLightboxFile.id; 
-            const oldTimestamp = currentLightboxFile.ai_last_scanned || 0;
-            
-            // 2. Feedback Visivo
-            const btn = document.getElementById('lightbox-index-btn');
-            const originalContent = btn.innerHTML;
-            btn.innerHTML = '⏳'; 
-            btn.style.cursor = 'wait';
-            btn.disabled = true;
-
-            // Parametri
-            let params = { force: false, beams: 3, precision: 'fp16' };
-            try { params = getAiParams(); } catch(e) {}
-
-            // 3. Invio richiesta
-            fetch('/galleryout/ai_indexing/add_files', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ 
-                    file_ids: [targetFileId],
-                    force: true, 
-                    beams: params.beams,
-                    precision: params.precision
-                })
-            })
-            .then(r => r.json())
-            .then(d => {
-                showNotification("Re-indexing started...", 'info');
-                
-                // 4. POLLING INTELLIGENTE (30 sec timeout)
-                let attempts = 0;
-                const maxAttempts = 30;
-                
-                const pollInterval = setInterval(() => {
-                    attempts++;
-
-                    // --- CHECK DI SICUREZZA ---
-                    // Se l'utente ha chiuso il lightbox o ha cambiato immagine, smetti di rompere
-                    if (!document.body.classList.contains('lightbox-open') || 
-                        !currentLightboxFile || 
-                        currentLightboxFile.id !== targetFileId) {
-                        clearInterval(pollInterval);
-                        return; 
-                    }
-                    // --------------------------
-                    
-                    fetch(`/galleryout/check_metadata/${targetFileId}`)
-                        .then(res => res.json())
-                        .then(meta => {
-                            // Se il timestamp è NUOVO => LAVORO FINITO
-                            if (meta.status === 'success' && (meta.ai_last_scanned > oldTimestamp)) {
-                                clearInterval(pollInterval); // Stop polling
-                                
-                                // A. Aggiorna i dati in RAM (Coda globale)
-                                const fileIndex = allFilesData.findIndex(f => f.id === targetFileId);
-                                if (fileIndex !== -1) {
-                                    allFilesData[fileIndex].ai_caption = meta.ai_caption;
-                                    allFilesData[fileIndex].ai_last_scanned = meta.ai_last_scanned;
-                                }
-                                
-                                // B. Aggiorna l'oggetto corrente del Lightbox
-                                currentLightboxFile.ai_caption = meta.ai_caption;
-                                currentLightboxFile.ai_last_scanned = meta.ai_last_scanned;
-                                
-                                // C. Aggiorna la toolbar (fa apparire l'icona cervello se mancava)
-                                updateLightboxButtonsUI(meta.has_workflow, meta.ai_caption, targetFileId);
-                                
-                                // D. AZIONE AUTOMATICA: APRI/AGGIORNA LA CAPTION
-                                // Passando 'true', questa funzione apre la finestra se chiusa,
-                                // o aggiorna il testo se era già aperta.
-                                toggleAiCaption(true, meta.ai_caption);
-                                
-                                // E. Reset UI
-                                showNotification("⚡ Finished! Caption updated.", 'success');
-                                btn.innerHTML = originalContent;
-                                btn.disabled = false;
-                                btn.style.cursor = 'pointer';
-                            }
-                        })
-                        .catch(err => console.error("Polling error:", err));
-
-                    // Timeout
-                    if (attempts >= maxAttempts) {
-                        clearInterval(pollInterval);
-                        btn.innerHTML = originalContent;
-                        btn.disabled = false;
-                        btn.style.cursor = 'pointer';
-                        showNotification("Indexing takes longer than expected. Check AI Manager.", 'warning');
-                    }
-                }, 1000); 
-            })
-            .catch(err => {
-                console.error("Lightbox Error:", err);
-                showNotification("Error queuing image", "error");
-                btn.innerHTML = originalContent;
-                btn.disabled = false;
-            });
-        }
-        
-        async function resetAiDataCurrentLightbox() {
-            if (!currentLightboxFile || !currentLightboxFile.id) return;
-
-            const confirmed = await smartConfirm(
-                "⚠️ Reset AI Data", 
-                "Erase AI metadata (caption & embedding) for this image?\nThe file itself will NOT be deleted.", 
-                true
-            );
-            
-            if (!confirmed) return;
-
-            const btn = document.getElementById('lightbox-reset-ai-btn');
-            const originalIcon = btn.innerHTML;
-            btn.innerHTML = "⏳";
-            btn.disabled = true;
-
-            fetch('/galleryout/ai_indexing/reset', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ file_ids: [currentLightboxFile.id] })
-            })
-            .then(r => r.json())
-            .then(d => {
-                if (d.status === 'success') {
-                    showNotification("AI Data erased.", "success");
-
-                    // Update local data
-                    currentLightboxFile.ai_caption = null;
-                    currentLightboxFile.ai_last_scanned = 0;
-
-                    const idx = allFilesData.findIndex(f => f.id === currentLightboxFile.id);
-                    if (idx !== -1) {
-                        allFilesData[idx].ai_caption = null;
-                        allFilesData[idx].ai_last_scanned = 0;
-                    }
-
-                    updateLightboxButtonsUI(currentLightboxFile.has_workflow, null, currentLightboxFile.id);
-                    toggleAiCaption(false);
-                } else {
-                    showNotification("Error: " + d.message, "error");
-                }
-            })
-            .catch(handleError)
-            .finally(() => {
-                if (btn) {
-                    btn.innerHTML = originalIcon;
-                    btn.disabled = false;
-                }
-            });
         }
         
         // --- FOLDER MENU TOGGLE ---

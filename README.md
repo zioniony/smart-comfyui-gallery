@@ -1,465 +1,130 @@
-<div align="center">
+# Smart ComfyUI Gallery (Go)
 
-  <h1>SmartGallery for ComfyUI</h1>
-  
-  <img src="assets/logo.png" width="120" alt="SmartGallery logo" style="margin-top: 10px; margin-bottom: 10px;">
-  
-  <p>
-    A lightweight, local, browser-based gallery that remembers<br>
-    <strong>exactly how every image or video was generated</strong>.
-  </p>
+A Golang rewrite/fork of SmartGallery for ComfyUI: it turns your ComfyUI output folder into a fast, searchable, mobile-friendly local web gallery, and tries to keep each image/video linked to its generating workflow.
 
-  <p>
-    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
-    <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python">
-    <a href="https://github.com/biagiomaf/smart-comfyui-gallery/stargazers">
-      <img src="https://img.shields.io/github/stars/biagiomaf/smart-comfyui-gallery?style=social" alt="Stars">
-    </a>
-  </p>
+## What is this
 
-</div>
+SmartGallery’s goal is to turn an “output folder” into a “searchable memory of your creative process”:
 
----
+- Fully local & offline: no cloud, no tracking; browse/search even when ComfyUI is not running
+- Workflow traceability: view/copy/download the workflow and key parameters used to generate a file
+- Built for iteration: fast filtering, batch operations, and comparisons; works well on desktop and mobile
 
-## What is SmartGallery?
+## Core features
 
-**SmartGallery** turns your ComfyUI output folder into a fast, searchable, mobile-friendly web gallery.
+The feature list below is adapted from the upstream README to describe this project’s positioning:
 
-Every generated file (image or video) is automatically linked to its **exact ComfyUI workflow**, even if:
-- ComfyUI is not running
-- the file was generated weeks or months ago
-- filenames are meaningless
+- Search & Filter: find outputs by keywords, model/LoRA, file type, date range, and more
+- Full workflow access: node summary and workflow JSON for PNG/JPG/WebP/WebM/MP4 outputs
+- File management: multi-select delete/move/copy/bulk rescan; create/rename folders
+- Mobile-first UX: optimized for desktop/tablet/phone
+- Compare mode: side-by-side comparison for images/videos (zoom/rotate/parameter diff, etc.)
+- Video overview: analyze videos with a frame grid
+- External folder linking: mount external drives or network paths into the gallery root
+- Auto-watch: refresh automatically when new files are detected
+- Cross-platform: Windows/Linux/macOS/Docker
 
-Everything runs **fully offline**, locally, with no cloud and no tracking. 
- 
-**Who is this for?**  
-ComfyUI users who generate a lot, iterate fast, and want to *never lose a workflow again*.
+Upstream project (Python implementation) and full documentation:
 
----
+- https://github.com/biagiomaf/smart-comfyui-gallery
 
-## Why it exists
+## Run modes
 
-If you use ComfyUI seriously, you probably faced this:
+This project supports two modes:
 
-- Thousands of outputs with generic filenames
-- Forgotten workflows
-- Hard to search by what you actually remember
-- No usable way to browse from your phone
+- Standalone server: runs a Go web server (default port `8189`)
+- ComfyUI plugin (recommended): no external server; build `smart_gallery.so` and let ComfyUI route requests in-process
 
-SmartGallery turns your output folder into a **living memory of your creative process**.
+## Prerequisites
 
----
+- Go (use a version compatible with this repository’s `go.mod`)
+- On Linux, building `github.com/mattn/go-sqlite3` typically requires a C toolchain (e.g. `gcc`)
 
-## Screenshots
-<div align="center">
-  <!-- Desktop Gallery Section -->
-  <table style="border-collapse: collapse; width: 100%;">
-    <tr>
-      <td align="center"><strong>Desktop Interface</strong></td>
-    </tr>
-    <tr>
-      <td align="center" style="padding: 10px;">
-        <img src="assets/desktop.png" width="900" alt="Desktop View">
-      </td>
-    </tr>
-    <tr>
-      <td align="center" style="vertical-align: top; padding: 10px;">
-        <em>Fast, clean desktop gallery with workflow-aware search</em>
-      </td>
-    </tr>
-  </table>
+## Configuration
 
-  <br>
+The repository provides an example env file [.env.example](./.env.example). Common fields:
 
-  <!-- Mobile Gallery Section -->
-  <table style="border-collapse: collapse; width: 100%;">
-    <tr>
-      <td align="center" width="50%"><strong>Mobile Interface</strong></td>
-      <td align="center" width="50%"><strong>Node Summary</strong></td>
-    </tr>
-    <tr>
-      <td align="center" style="vertical-align: top; padding: 10px;">
-        <img src="assets/mobile.png" height="500" alt="Mobile View">
-      </td>
-      <td align="center" style="vertical-align: top; padding: 10px;">
-        <img src="assets/mobile-node-summary.png" height="500" alt="Node Summary">
-      </td>
-    </tr>
-    <tr>
-      <td align="center" style="vertical-align: top; padding: 10px;">
-        <em>Fully usable on mobile</em>
-      </td>
-      <td align="center" style="vertical-align: top; padding: 10px;">
-        <em>Instant workflow recall with visual node summary</em>
-      </td>
-    </tr>
-  </table>
-</div>
+- `BASE_OUTPUT_PATH`: ComfyUI output directory
+- `BASE_INPUT_PATH`: ComfyUI input directory
+- `SERVER_PORT`: listen port for standalone mode (default `8189`)
 
----
+Copy the example file to `.env` and edit it:
 
-## Core Features
-- **Search & Filter:** Find files by keywords, specific models/LoRAs, file extension, date range, and more.
-- **Full Workflow Access:** View node summary, copy to clipboard, or download JSON for any PNG, JPG, WebP, WebM or MP4.
-- **File Manager Operations:** Select multiple files to delete, move, copy or re-scan in bulk. Add and rename folders.
-- **Mobile-First Experience** Optimized UI for desktop, tablet, and smartphone.
-- **Compare Mode:** Professional side-by-side comparison tool for images and videos with synchronized zoom, rotate and parameter diff.
-- **Video Storyboard Overview** Analyze video content with a clean 11-frame grid covering the entire duration.
-- **External Folder Linking:** Mount external hard drives or network paths directly into the gallery root, including media not generated by ComfyUI.
-- **Auto-Watch:** Automatically refreshes the gallery when new files are detected.
-- **Cross-platform:** Windows, Linux, macOS, and Docker support. Completely platform agnostic.
-- **Fully Offline:** Works even when ComfyUI is not running.  
-
----
-
-**Actively developed** — frequent updates focused on real ComfyUI workflows.  
-
-## What’s New in v1.55
-In this release, along with several other features, we are introducing a brand-new tool for analyzing videos
-
-<div align="center">
-  <img src="assets/storyboard.png" width="900" alt="New Storyboard Overview">
-  <br>
-  <em>The 11-frame Grid covering the entire duration from Start to the Last Frame</em>
-</div>
-<br>
-
-- **Video Storyboard & Analysis** Instantly analyze video content with a clean 11-frame Grid covering the entire duration from Start to the True Last Frame.
-- **Options Menu:** New persistent **`⚙️ Options`** menu (Desktop/Mobile) to manage core gallery settings.
-- **Thumbnail Grid Size:** Added a new toggle in the Options menu (`⚙️`) allowing users to switch between **Normal** and **Compact** view on desktop. 
-- **Focus Mode:** A new streamlined view. Hides UI clutter and changes click behavior to "Select Only" for rapid batching. Accessible via the **`⚡`** button or **`Q`** key.
-- **Shortcuts Button:** Added many shortcuts and a dedicated `? Shortcuts` button in the desktop header for Quick Actions description.
-- **Generation Dashboard:** Added a high-fidelity summary panel at the top of the Node Summary to show Seed, Model, Steps, and Prompts at a glance.
-- **Smart Video Grid:** Completely rewritten "Play/Pause on Scroll" engine. Videos strictly pause when leaving the viewport, drastically reducing CPU/GPU usage.
-- **Video Autoplay Control:** A session-based toggle to enable/disable video autoplay in the grid. (Default: OFF). **`P`** key shortcut to quickly toggle the Video Autoplay setting.
-- **Dynamic UX for Videos:**
-    - On **Desktop**, when Autoplay is OFF, a small ▶ icon appears in the corner. Clicking it plays the video in-grid for quick preview.
-    - On **Mobile**, the thumbnail is fully clickable to open the Lightbox (Click-to-Open).
-- **Auto-Consistency:** The system forces a robust Full Sync on every startup to remove "ghost" files deleted externally via OS.
-
-This is a curated summary — see the 👉 full [CHANGELOG](CHANGELOG.md) for all technical changes.
-
----
-
-## Installation & Update  
-## - Windows, macOS, Linux, Docker  
-
-<details>
-<summary><strong>Select your platform</strong></summary>
-
-Each quick install shows **only the relevant steps for that platform**.
-
----
-
-<details>
-<summary><strong>Windows (Python)</strong></summary>
-
-### 1. Install
-
-**Option A: Using Git (Recommended)**
-```bat
-git clone https://github.com/biagiomaf/smart-comfyui-gallery
-cd smart-comfyui-gallery
-```
-
-**Option B: No Git (Manual Download)**
-
-Download the latest **Source code (zip)** from [**Releases**](https://github.com/biagiomaf/smart-comfyui-gallery/releases/latest), extract it, and open a terminal inside the folder.
-
-**Then, setup the environment:**
-```bat
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-### 2. Run (Best Practice)
-
-Create a new file named `run_smartgallery.bat` inside the folder and paste this content.
-
-**⚠️ IMPORTANT:** Replace the example paths with your real paths. Use forward slashes `/` even on Windows.
-```bat
-@echo off
-cd /d %~dp0
-call venv\Scripts\activate.bat
-
-:: --- CONFIGURATION ---
-:: REPLACE these paths with your actual folders.
-:: NOTE: Use forward slashes (/) for paths (e.g., C:/ComfyUI/output)
-
-set "BASE_OUTPUT_PATH=C:/Path/To/ComfyUI/output"
-set "BASE_INPUT_PATH=C:/Path/To/ComfyUI/input"
-set "BASE_SMARTGALLERY_PATH=C:/Path/To/ComfyUI/output"
-
-:: If ffmpeg is not in your system PATH, point to ffprobe.exe here:
-set "FFPROBE_MANUAL_PATH=C:/Path/To/ffmpeg/bin/ffprobe.exe"
-set SERVER_PORT=8189
-
-:: --- START ---
-python smartgallery.py
-pause
-```
-
-Double-click `run_smartgallery.bat` to start.
-
-### 3. How to Update
-
-If you installed via Git:
-```bat
-cd smart-comfyui-gallery
-git pull
-venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-If you downloaded the ZIP: Download the new version, extract it, and copy your `run_smartgallery.bat` into the new folder.
-
-</details>
-
----
-
-<details>
-<summary><strong>macOS (Python)</strong></summary>
-
-### 1. Install
-
-**Option A: Using Git (Recommended)**
 ```bash
-git clone https://github.com/biagiomaf/smart-comfyui-gallery
-cd smart-comfyui-gallery
+cp .env.example .env
+# edit .env by your own
 ```
 
-**Option B: No Git (Manual Download)**
+## Quick start: standalone server
 
-Download the latest **Source code (tar.gz)** from [**Releases**](https://github.com/biagiomaf/smart-comfyui-gallery/releases/latest), extract it, and open a terminal inside the folder.
+1. Edit `.env` and make sure `BASE_OUTPUT_PATH` / `BASE_INPUT_PATH` point to your ComfyUI folders
+2. Start:
 
-**Then, setup the environment:**
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+make run
 ```
 
-### 2. Run (Best Practice)
+3. Open:
 
-Create a file named `run_smartgallery.sh`, make it executable (`chmod +x run_smartgallery.sh`), and paste this content:
+- `http://localhost:8189/galleryout/view/_root_`
+
+## Quick start: ComfyUI plugin (recommended)
+
+This mode does not start the external `8189` server. ComfyUI registers `/galleryout/*` routes and forwards requests to `smart_gallery.so` in-process.
+
+### 1) Install into ComfyUI
+
+Place this project under ComfyUI’s `custom_nodes` (copy or symlink):
+
+- `$COMFYUI_ROOT/custom_nodes/smart-comfyui-gallery-go/`
+
+### 2) Build the plugin .so
+
+From this repository root:
+
 ```bash
-#!/bin/bash
-source venv/bin/activate
-
-# Increase open files limit (fix for "Too many open files" on macOS)
-ulimit -n 4096
-
-# --- CONFIGURATION ---
-# REPLACE these paths with your actual folders.
-export BASE_OUTPUT_PATH="$HOME/ComfyUI/output"
-export BASE_INPUT_PATH="$HOME/ComfyUI/input"
-export BASE_SMARTGALLERY_PATH="$HOME/ComfyUI/output"
-
-# Ensure ffprobe is installed (brew install ffmpeg)
-export FFPROBE_MANUAL_PATH="/usr/bin/ffprobe"
-export SERVER_PORT=8189
-
-# --- START ---
-python smartgallery.py
+make plugin
 ```
 
-Run it with: `./run_smartgallery.sh`
+Artifacts:
 
-### 3. How to Update
+- `smart_gallery.so`
+- `smart_gallery.h`
+
+They will appear in the plugin directory (so ComfyUI can load them directly).
+
+### 3) Restart and verify
+
+After restarting ComfyUI:
+
+- Open `http://localhost:8188/galleryout/view/_root_`
+- Or click “Gallery” in the ComfyUI sidebar
+
+## Common commands
+
 ```bash
-cd smart-comfyui-gallery
-git pull
-source venv/bin/activate
-pip install -r requirements.txt
-```
-If you downloaded the tar.gz: Download the new version, extract it, and copy your `run_smartgallery.sh` into the new folder.
-
-</details>
-
----
-
-<details>
-<summary><strong>Linux (Python)</strong></summary>
-
-### 1. Install
-
-**Option A: Using Git (Recommended)**
-```bash
-git clone https://github.com/biagiomaf/smart-comfyui-gallery
-cd smart-comfyui-gallery
+make fmt
+make test
+make build
+make so
+make plugin
+make run
 ```
 
-**Option B: No Git**
+## Troubleshooting
 
-Download **Source code** from [**Releases**](https://github.com/biagiomaf/smart-comfyui-gallery/releases/latest).
+- `/galleryout/...` says backend unavailable: ensure `smart_gallery.so` exists in the plugin directory and restart ComfyUI
+- `.so` build fails: typically missing C toolchain required by `go-sqlite3`
+- Sidebar page looks broken: first open `http://localhost:8188/galleryout/view/_root_` to validate backend and UI, then check whether the frontend extension is loaded
 
-**Then, setup the environment:**
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
+## Upstream and credits
 
-### 2. Run (Best Practice)
+This repository is a Golang rewrite/fork of SmartGallery for ComfyUI. Upstream project:
 
-Create a file named `run_smartgallery.sh`, make it executable (`chmod +x run_smartgallery.sh`), and paste this content:
-```bash
-#!/bin/bash
-source venv/bin/activate
+- https://github.com/biagiomaf/smart-comfyui-gallery
 
-# --- CONFIGURATION ---
-# REPLACE these paths with your actual folders.
-export BASE_OUTPUT_PATH="$HOME/ComfyUI/output"
-export BASE_INPUT_PATH="$HOME/ComfyUI/input"
-export BASE_SMARTGALLERY_PATH="$HOME/ComfyUI/output"
-export FFPROBE_MANUAL_PATH="/usr/bin/ffprobe"
-export SERVER_PORT=8189
+Thanks and notice:
 
-# --- START ---
-python smartgallery.py
-```
-
-Run it with: `./run_smartgallery.sh`
-
-### 3. How to Update
-```bash
-cd smart-comfyui-gallery
-git pull
-source venv/bin/activate
-pip install -r requirements.txt
-```
-If you downloaded the source code manually: Download the new version, extract it, and copy your `run_smartgallery.sh` into the new folder.
-
-</details>
-
----
-
-<details>
-<summary><strong>Docker</strong></summary>
-
-### 1. Run
-
-Replace the paths on the left side of the `:` with your actual host paths.
-```bash
-docker run \
-  --name smartgallery \
-  -v /your/host/output:/mnt/output \
-  -v /your/host/input:/mnt/input \
-  -v /your/host/SmartGallery:/mnt/SmartGallery \
-  -e BASE_OUTPUT_PATH=/mnt/output \
-  -e BASE_INPUT_PATH=/mnt/input \
-  -e BASE_SMARTGALLERY_PATH=/mnt/SmartGallery \
-  -p 8189:8189 \
-  -e WANTED_UID=`id -u` \
-  -e WANTED_GID=`id -g` \
-  mmartial/smart-comfyui-gallery
-```
-
-### 2. How to Update
-```bash
-# 1. Pull the latest image
-docker pull mmartial/smart-comfyui-gallery
-
-# 2. Stop and remove the old container
-docker stop smartgallery && docker rm smartgallery
-
-# 3. Run the 'docker run' command again (see above)
-```
-
-### 🐳 Docker Deployment 
-
-Want to run SmartGallery in a containerized environment? We've got you covered!
-
-> 🎖️ **Special Thanks**: A huge shout-out to **[Martial Michel](https://github.com/mmartial)** for orchestrating the Docker support and contributing to the core application logic.
-
-Docker deployment provides isolation, easier deployment, and consistent environments across different systems. However, it requires some familiarity with Docker concepts.
-
-**🗄️ Pre-built images**
-
-Pre-built images are available on DockerHub at [mmartial/smart-comfyui-gallery](https://hub.docker.com/r/mmartial/smart-comfyui-gallery) and Unraid's Community Apps. 
-
-![assets/smart-comfyui-gallery-unraidCA.png](assets/smart-comfyui-gallery-unraidCA.png)
-
-**Full Docker guide:** 👉 [docs/DOCKER_HELP.md](DOCKER_HELP.md)
-
-
-</details>
-
-</details>
-
----
-
-### - Open SmartGallery
-
-```
-http://127.0.0.1:8189/galleryout
-```
-
----
-
-For advanced configuration: 👉 [Complete Installation Guide](docs/installation.md) (Docker Compose, reverse proxy, ffmpeg, scripts, and more)
-
----
-
-## Experimental Features
-
-**Testing cutting-edge features before official releases?**
-
-The [`/experiments`](experiments/) folder contains beta versions and hotfixes under active development.
-
-⚠️ **Experimental code — use at your own risk. Always backup before testing.**
-
----
-
-## Optional AI Features (Planned)
-
-SmartGallery is designed to stay **lightweight by default**.
-
-Advanced AI-powered features (semantic search, natural language queries) will be provided by a **separate optional service**:
-
-* Fully optional
-* Runs locally
-* Separate Docker container or Python environment
-* No impact on the core gallery if not installed
-
-The AI service is currently **under development and not released yet**.
-
----
-
-## Philosophy
-
-* Local-first
-* Privacy-first
-* Minimal dependencies
-* No forced upgrades
-* No vendor lock-in
-
----
-
-## Contributing & Feedback
-
-Issues, ideas, and pull requests are welcome.
-
-* [Open an issue](../../issues)
-* Fork → branch → PR
-
----
-
-## ⭐ Support the Project
-
-If SmartGallery improves your ComfyUI workflow, consider giving the repository a ⭐.
-
-It helps visibility, motivates future development, and costs nothing.
-
----
-
-## License
-
-MIT License — see [LICENSE](LICENSE)
-
----
-
-<p align="center">
-  <em>Made for the ComfyUI community</em>
-</p>
+- Thanks to the upstream SmartGallery for ComfyUI project and its author (GitHub: [@biagiomaf](https://github.com/biagiomaf)) for the open-source work and continued maintenance
+- This is an unofficial fork/rewrite aiming to replicate/adapt the upstream experience in Go
+- Usage and redistribution must follow the upstream project’s license and statements; if anything differs, defer to the upstream project
